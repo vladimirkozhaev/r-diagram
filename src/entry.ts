@@ -14,12 +14,15 @@ function delay() {
 
     var myDiagram = $( go.Diagram, "myDiagramDiv",  // create a Diagram for the DIV HTML element
         {
+        layout: $(go.TreeLayout,
+                { angle: 0, nodeSpacing: 10, layerSpacing: 30 }),
             "undoManager.isEnabled": true  // enable undo & redo
         } );
 
     // define a simple Node template
     myDiagram.nodeTemplate =
         $( go.Node, "Auto",  // the Shape will go around the TextBlock
+               
             $( go.Shape, "RoundedRectangle", { strokeWidth: 0, fill: "white" },
 
                 // Shape.fill is bound to Node.data.color
@@ -27,7 +30,8 @@ function delay() {
             $( go.TextBlock,
                 { margin: 8, font: "bold 14px sans-serif", stroke: '#333' }, // Specify a margin to add some room around the text
                 // TextBlock.text is bound to Node.data.key
-                new go.Binding( "text", "key" ) )
+                new go.Binding( "text", "key" ) ),
+                
 
         );
 
@@ -42,24 +46,23 @@ function delay() {
                   var l:go.Link = link as go.Link;
                   var from=l.fromNode;
                   var to=l.toNode;
+                  var nodeName:string=""+nodeDataArray.length
                  
-                  //nodeLinkArray.push({from:from.key as string,to:to.key as string})
-                  linkModel.addLinkData({from:from.key as string,to:to.key as string});
+                  myDiagram.model.addNodeData({key:""+nodeName,color:"lightblue"})
+                 
+                  linkModel.addLinkData({from:from.key as string,to:nodeName});
+                  linkModel.addLinkData({from:nodeName as string,to:to.key});
+                  myDiagram.remove(l)
                 }
             }
         );
 
     // but use the default Link template, by not setting Diagram.linkTemplate
     var nodeDataArray=[{ key: "Alpha", color: "lightblue" },
-    { key: "Beta", color: "orange" },
-    { key: "Gamma", color: "lightgreen" },
-    { key: "Delta", color: "pink" }]
+    { key: "Beta", color: "orange" }]
     var nodeLinkArray=[
-                       { from: "Alpha", to: "Beta" },
-                       { from: "Alpha", to: "Gamma" },
-                       { from: "Beta", to: "Beta" },
-                       { from: "Gamma", to: "Delta" },
-                       { from: "Delta", to: "Alpha" }
+                       { from: "Alpha", to: "Beta" }
+                       
                    ] ;
     // create the model data that will be represented by Nodes and Links
     
