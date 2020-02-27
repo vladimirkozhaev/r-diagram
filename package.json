@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "@types/d3": "5.7.2",
-    "gojs": "2.1.8",
+    "gojs": "^2.1.9",
     "live-server": "^1.2.1",
     "ts-loader": "^6.2.1",
     "typescript": "^3.7.5",
@@ -28,8 +28,8 @@
   "homepage": "https://github.com/EcutDavid/flappy-bird-pixijs#readme",
   "dependencies": {
     "@types/jquery": "^3.3.32",
-    "gojs": "2.1.8",
-    "pixi.js": "^5.2.0"
+    "pixi.js": "^5.2.0",
+    "ts-node": "^8.6.2"
   },
   "author": "",
   "license": "ISC",
