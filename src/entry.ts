@@ -1,5 +1,5 @@
 import * as go from "gojs";
-//import * as LinkLabelOnPathDraggingTool from './LinkLabelOnPathDraggingTool.js'
+//  import { ParallelRouteLink } from './ParallelRouteLink.ts'
 
 
 
@@ -14,8 +14,8 @@ function delay() {
 
     var myDiagram = $( go.Diagram, "myDiagramDiv",  // create a Diagram for the DIV HTML element
         {
-            layout: $( go.TreeLayout,
-                { angle: 0, nodeSpacing: 10, layerSpacing: 30 } ),
+            initialAutoScale: go.Diagram.UniformToFill,
+            layout: $( go.LayeredDigraphLayout ),
             "undoManager.isEnabled": true  // enable undo & redo
         } );
 
@@ -32,6 +32,8 @@ function delay() {
                     { column: 0, alignment: go.Spot.Left } ),
                 $( go.RowColumnDefinition,
                     { column: 1, alignment: go.Spot.Right } ),
+                    $( go.RowColumnDefinition,
+                            { column: 2, alignment: go.Spot.Right } ),
                 $( go.TextBlock,  // the node title
                     {
                         column: 0, row: 0, columnSpan: 3, alignment: go.Spot.Center,
@@ -43,35 +45,33 @@ function delay() {
                     $( go.Shape,  // the "A" port
                         {
                             width: 6, height: 6, portId: "A", toSpot: go.Spot.Right,
-                            fromLinkable: true, toMaxLinks: 1,toLinkable: true,
+                            fromLinkable: true, toMaxLinks: 1, toLinkable: true,
                         } ),  // allow user-drawn links from here
                     $( go.TextBlock, "In" )  // "A" port label
                 ),
-//                $( go.Panel, "Horizontal",
-//                    { column: 1, row: 1 },
-//                    $( go.Shape,  // the "B" port
-//                        {
-//                            width: 6, height: 6, portId: "B", toSpot: go.Spot.Left,
-//                            toLinkable: true, toMaxLinks: 1
-//                        } ),  // allow user-drawn links from here
-//                    $( go.TextBlock, "B" )  // "B" port label
-//                ),
-//                $( go.Panel, "Horizontal",
-//                    { column: 2, row: 1, rowSpan: 2 },
-//                    $( go.TextBlock, "Out" ),  // "Out" port label
-//                    $( go.Shape,  // the "Out" port
-//                        {
-//                            width: 6, height: 6, portId: "Out", fromSpot: go.Spot.Right,
-//                            fromLinkable: true
-//                        } )  // allow user-drawn links to here
-//                )
-            )
+                $( go.TextBlock,"Click",
+                    {
+                    column:0, row:2,
+                        click: function( e,node ) {
+                            alert( "Click "+node.panel.panel )
+                            var n:go.Node = node.panel.panel as go.Node;
+                            var nodeName: string = "" + nodeDataArray.length
+
+                            myDiagram.model.addNodeData( { key: "" + nodeName, color: "lightblue" } )
+                            
+                            linkModel.addLinkData( { from: n.key as string, to: nodeName } );
+                           
+                            
+                        }
+                    }
+                )
 
 
-        );
+            ) );
 
     myDiagram.linkTemplate =
         $( go.Link,
+            { routing: go.Link.AvoidsNodes },
             $( go.Shape ),  // the link shape
             $( go.Shape,   // the arrowhead
                 { toArrow: "OpenTriangle", fill: null } ),
@@ -94,9 +94,10 @@ function delay() {
 
     // but use the default Link template, by not setting Diagram.linkTemplate
     var nodeDataArray = [{ key: "Alpha", color: "lightblue" },
-    { key: "Beta", color: "orange" }]
+    { key: "Beta", color: "lightblue" }, { key: "Gamma", color: "lightblue" }]
     var nodeLinkArray = [
-        { from: "Alpha", to: "Beta" }
+        { from: "Alpha", to: "Beta" },
+        { from: "Alpha", to: "Gamma" }
 
     ];
     // create the model data that will be represented by Nodes and Links
