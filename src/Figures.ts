@@ -15,7 +15,7 @@
 * See the Extensions intro page (https://gojs.net/latest/intro/extensions.html) for more information.
 */
 
-class FigureParameter {
+export class FigureParameter {
 
     n: string;
     def: number;

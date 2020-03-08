@@ -1,5 +1,6 @@
 import * as go from "gojs";
-//  import { ParallelRouteLink } from './ParallelRouteLink.ts'
+import * as figures from './Figures';
+import * as parralelLink from './ParallelRouteLink'
 
 
 
@@ -15,7 +16,7 @@ function delay() {
     var myDiagram = $( go.Diagram, "myDiagramDiv",  // create a Diagram for the DIV HTML element
         {
             initialAutoScale: go.Diagram.UniformToFill,
-            layout: $( go.LayeredDigraphLayout ),
+            layout: $( go.GridLayout ),
             "undoManager.isEnabled": true  // enable undo & redo
         } );
 
@@ -70,8 +71,8 @@ function delay() {
             ) );
 
     myDiagram.linkTemplate =
-        $( go.Link,
-            { routing: go.Link.AvoidsNodes },
+        $( parralelLink.ParallelRouteLink,
+            { routing: go.Link.AvoidsNodes, curve: go.Link.JumpGap },
             $( go.Shape ),  // the link shape
             $( go.Shape,   // the arrowhead
                 { toArrow: "OpenTriangle", fill: null } ),

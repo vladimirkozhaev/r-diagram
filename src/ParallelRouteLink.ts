@@ -28,10 +28,11 @@ import * as go from 'gojs'
 
 export class ParallelRouteLink extends go.Link{
 	constructor() {
+	    super()
 		go.Link.call(this);
 	}
 	
-	public computePoints():void {
+	public computePoints():boolean {
 		  var result = go.Link.prototype.computePoints.call(this);
 		  if (!this.isOrthogonal && this.curve !== go.Link.Bezier && this.hasCurviness()) {
 		    var curv = this.computeCurviness();
@@ -84,3 +85,5 @@ export class ParallelRouteLink extends go.Link{
 		  return result;
 		}
 }
+
+
