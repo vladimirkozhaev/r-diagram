@@ -1,6 +1,7 @@
 import * as go from "gojs";
 import * as figures from './Figures';
-import * as parralelLink from './ParallelRouteLink'
+import {ParallelRouteLink} from './ParallelRouteLink'
+import {ParallelLayout} from './ParallelLayout'
 
 
 
@@ -16,7 +17,8 @@ function delay() {
     var myDiagram = $( go.Diagram, "myDiagramDiv",  // create a Diagram for the DIV HTML element
         {
             initialAutoScale: go.Diagram.UniformToFill,
-            layout: $( go.GridLayout ),
+            layout: $(ParallelLayout,
+                    { layerSpacing: 20, nodeSpacing: 10 }),
             "undoManager.isEnabled": true  // enable undo & redo
         } );
 
@@ -71,11 +73,15 @@ function delay() {
             ) );
 
     myDiagram.linkTemplate =
-        $( parralelLink.ParallelRouteLink,
-            { routing: go.Link.AvoidsNodes, curve: go.Link.JumpGap },
+        $( ParallelRouteLink,
+                {
+            relinkableFrom: true, relinkableTo: true,
+            reshapable: true //, resegmentable: true
+          },
             $( go.Shape ),  // the link shape
             $( go.Shape,   // the arrowhead
-                { toArrow: "OpenTriangle", fill: null } ),
+                    { stroke: 'gray', strokeWidth: 1.5 },
+             { toArrow: "OpenTriangle", fill: null } ),
             {
 
                 click: ( e, link ) => {
