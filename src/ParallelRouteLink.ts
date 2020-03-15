@@ -37,6 +37,7 @@ export class ParallelRouteLink extends go.Link{
 		  if (!this.isOrthogonal && this.curve !== go.Link.Bezier && this.hasCurviness()) {
 		    var curv = this.computeCurviness();
 		    if (curv !== 0) {
+		      
 		      var num = this.pointsCount;
 		      var pidx = 0;
 		      var qidx = num-1;
