@@ -1,7 +1,8 @@
 import * as go from "gojs";
 import * as figures from './Figures';
-import {MultiArrowLink} from './MultiArrowLink'
-import {ParallelLayout} from './ParallelLayout'
+import { MultiArrowLink } from './MultiArrowLink'
+import { ParallelLayout } from './ParallelLayout'
+import {ParallelRouteLink} from './ParallelRouteLink';
 
 
 
@@ -17,8 +18,10 @@ function delay() {
     var myDiagram = $( go.Diagram, "myDiagramDiv",  // create a Diagram for the DIV HTML element
         {
             initialAutoScale: go.Diagram.UniformToFill,
-            layout: $(ParallelLayout),
-                    
+            layout: $( go.TreeLayout, {angle:0,alignment:go.TreeLayout.AlignmentStart}),
+                
+          
+
             "undoManager.isEnabled": true  // enable undo & redo
         } );
 
@@ -35,8 +38,8 @@ function delay() {
                     { column: 0, alignment: go.Spot.Left } ),
                 $( go.RowColumnDefinition,
                     { column: 1, alignment: go.Spot.Right } ),
-                    $( go.RowColumnDefinition,
-                            { column: 2, alignment: go.Spot.Right } ),
+                $( go.RowColumnDefinition,
+                    { column: 2, alignment: go.Spot.Right } ),
                 $( go.TextBlock,  // the node title
                     {
                         column: 0, row: 0, columnSpan: 3, alignment: go.Spot.Center,
@@ -52,19 +55,19 @@ function delay() {
                         } ),  // allow user-drawn links from here
                     $( go.TextBlock, "In" )  // "A" port label
                 ),
-                $( go.TextBlock,"Click",
+                $( go.TextBlock, "Click",
                     {
-                    column:0, row:2,
-                        click: function( e,node ) {
-                           
-                            var n:go.Node = node.panel.panel as go.Node;
+                        column: 0, row: 2,
+                        click: function( e, node ) {
+
+                            var n: go.Node = node.panel.panel as go.Node;
                             var nodeName: string = "" + nodeDataArray.length
 
-                            myDiagram.model.addNodeData( { key: "" + nodeName, color: "lightblue" } )
-                            
+                            myDiagram.model.addNodeData( { key: "" + nodeName, color: "lightblue",layer:""+(nodeDataArray.length+1) } )
+
                             linkModel.addLinkData( { from: n.key as string, to: nodeName } );
-                           
-                            
+
+
                         }
                     }
                 )
@@ -73,23 +76,24 @@ function delay() {
             ) );
 
     myDiagram.linkTemplate =
-        $( MultiArrowLink,
-                {
-            relinkableFrom: true, relinkableTo: true,
-            reshapable: true , resegmentable: true
-          },
-          { routing: go.Link.AvoidsNodes },
+        $( go.Link,
+            {
+                relinkableFrom: true, relinkableTo: true,
+                reshapable: true, resegmentable: true
+            },
+            { routing: go.Link.AvoidsNodes },
             $( go.Shape ),  // the link shape
             $( go.Shape,   // the arrowhead
-                    { stroke: 'gray', strokeWidth: 1.5 },
-             { toArrow: "OpenTriangle", fill: null } ),
+                { stroke: 'gray', strokeWidth: 1.5 },
+                { toArrow: "OpenTriangle", fill: null } ),
             {
 
                 click: ( e, link ) => {
                     var l: go.Link = link as go.Link;
                     var from = l.fromNode;
                     var to = l.toNode;
-                    var nodeName: string = "" + nodeDataArray.length
+                   
+                    var nodeName: string =  ""+nodeDataArray.length
 
                     myDiagram.model.addNodeData( { key: "" + nodeName, color: "lightblue" } )
 
@@ -101,11 +105,10 @@ function delay() {
         );
 
     // but use the default Link template, by not setting Diagram.linkTemplate
-    var nodeDataArray = [{ key: "Alpha", color: "lightblue" },
-    { key: "Beta", color: "lightblue" }, { key: "Gamma", color: "lightblue" }]
+    var nodeDataArray = [{ key: "start", color: "lightblue" },
+    { key: "end", color: "lightblue" }]
     var nodeLinkArray = [
-        { from: "Alpha", to: "Beta" },
-        { from: "Alpha", to: "Gamma" }
+        { from: "start", to: "end" }
 
     ];
     // create the model data that will be represented by Nodes and Links
