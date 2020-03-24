@@ -2,7 +2,8 @@ import * as go from "gojs";
 import * as figures from './Figures';
 import { MultiArrowLink } from './MultiArrowLink'
 import { ParallelLayout } from './ParallelLayout'
-import {ParallelRouteLink} from './ParallelRouteLink';
+import { ParallelRouteLink } from './ParallelRouteLink';
+import { RLayout } from './RLayout';
 
 
 
@@ -18,12 +19,39 @@ function delay() {
     var myDiagram = $( go.Diagram, "myDiagramDiv",  // create a Diagram for the DIV HTML element
         {
             initialAutoScale: go.Diagram.UniformToFill,
-            layout: $( go.TreeLayout, {angle:0,alignment:go.TreeLayout.AlignmentStart}),
-                
-          
+            layout: $( RLayout ),
+
+
 
             "undoManager.isEnabled": true  // enable undo & redo
         } );
+
+    myDiagram.addDiagramListener( "LinkDrawn", function( e: go.DiagramEvent ) {
+        var link: go.Link = e.subject as go.Link
+        var fromPort: go.Node = link.fromPort as go.Node;
+        var toPort: go.Node = link.toPort as go.Node;
+        var fromLinkIterator: go.Iterator<go.Link> = fromPort.findLinksInto( null );
+
+        var fromPortRow: number = fromPort.data.row as number;
+        var toPortRow: number = toPort.data.row as number;
+        var fromPortColumn: number = fromPort.data.column as number;
+        var toPortColumn: number = toPort.data.column as number;
+
+        var firstName: string = "" + nodeDataArray.length
+        var secondName: string = "" + ( nodeDataArray.length + 1 )
+
+        myDiagram.model.addNodeData( { key: "" + firstName, color: "lightblue", column: fromPortColumn, row: ( toPortRow + 1 ) } )
+        myDiagram.model.addNodeData( { key: "" + secondName, color: "lightblue", column: toPortColumn, row: ( toPortRow + 1 ) } )
+        alert("fromPortRow:"+fromPortRow+", toPortRow:"+toPortRow+", fromPortColumn:"+fromPortColumn+", toPortColumn:"+toPortColumn)
+        linkModel.addLinkData( { from: fromPort.key as string, to: firstName } );
+        linkModel.addLinkData( { from: firstName, to: secondName } );
+        linkModel.addLinkData( { from: secondName, to: toPort.key as string } );
+
+        myDiagram.remove( link )
+
+
+        //alert("from:"+link.fromPort+" to:"+link.toPort)
+    } );
 
     // define a simple Node template
     myDiagram.nodeTemplate =
@@ -63,7 +91,7 @@ function delay() {
                             var n: go.Node = node.panel.panel as go.Node;
                             var nodeName: string = "" + nodeDataArray.length
 
-                            myDiagram.model.addNodeData( { key: "" + nodeName, color: "lightblue",layer:""+(nodeDataArray.length+1) } )
+                            myDiagram.model.addNodeData( { key: "" + nodeName, color: "lightblue", layer: "" + ( nodeDataArray.length + 1 ) } )
 
                             linkModel.addLinkData( { from: n.key as string, to: nodeName } );
 
@@ -81,7 +109,7 @@ function delay() {
                 relinkableFrom: true, relinkableTo: true,
                 reshapable: true, resegmentable: true
             },
-            { routing: go.Link.AvoidsNodes },
+            { routing: go.Link.Orthogonal, corner: 5, reshapable: true },
             $( go.Shape ),  // the link shape
             $( go.Shape,   // the arrowhead
                 { stroke: 'gray', strokeWidth: 1.5 },
@@ -92,10 +120,10 @@ function delay() {
                     var l: go.Link = link as go.Link;
                     var from = l.fromNode;
                     var to = l.toNode;
-                   
-                    var nodeName: string =  ""+nodeDataArray.length
+                    var sort: number = nodeDataArray.length;
+                    var nodeName: string = "" + sort
 
-                    myDiagram.model.addNodeData( { key: "" + nodeName, color: "lightblue" } )
+                    myDiagram.model.addNodeData( { key: "" + nodeName, color: "lightblue", sort: sort } )
 
                     linkModel.addLinkData( { from: from.key as string, to: nodeName } );
                     linkModel.addLinkData( { from: nodeName as string, to: to.key } );
@@ -105,8 +133,8 @@ function delay() {
         );
 
     // but use the default Link template, by not setting Diagram.linkTemplate
-    var nodeDataArray = [{ key: "start", color: "lightblue" },
-    { key: "end", color: "lightblue" }]
+    var nodeDataArray = [{ key: "start", color: "lightblue", row: 0, column: 0 },
+    { key: "end", color: "lightblue", row: 0, column: 1 }]
     var nodeLinkArray = [
         { from: "start", to: "end" }
 

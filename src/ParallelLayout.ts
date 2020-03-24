@@ -90,6 +90,8 @@ export class ParallelLayout extends go.TreeLayout {
     if (this._mergeNode) net.deleteNode(this._mergeNode);
     return net;
   }
+  
+  
 
   /**
    * Assigns a position for the merge node once the other nodes have been committed.
