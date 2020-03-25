@@ -26,7 +26,7 @@ export class RLayout extends go.Layout {
               
               v.centerX = column*100;
               v.centerY = row*100;
-              alert("row:"+row+", column:"+column)
+             
             }
             this.updateParts();
             this.network = null;
