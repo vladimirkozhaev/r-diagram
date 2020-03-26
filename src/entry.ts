@@ -4,6 +4,7 @@ import { MultiArrowLink } from './MultiArrowLink'
 import { ParallelLayout } from './ParallelLayout'
 import { ParallelRouteLink } from './ParallelRouteLink';
 import { RLayout } from './RLayout';
+import {DiagramOperationsProcessing} from './controller/DiagramOperationsProcessing'
 
 
 
@@ -16,6 +17,8 @@ function delay() {
 
     var $ = go.GraphObject.make;  // for conciseness in defining templates
 
+    var diagramProcessing:DiagramOperationsProcessing;
+    
     var myDiagram = $( go.Diagram, "myDiagramDiv",  // create a Diagram for the DIV HTML element
         {
             initialAutoScale: go.Diagram.UniformToFill,
@@ -26,58 +29,6 @@ function delay() {
             "undoManager.isEnabled": true  // enable undo & redo
         } );
 
-    myDiagram.addDiagramListener( "LinkDrawn", function( e: go.DiagramEvent ) {
-        var link: go.Link = e.subject as go.Link
-        var fromPort: go.Node = link.fromPort as go.Node;
-        var toPort: go.Node = link.toPort as go.Node;
-
-
-
-
-        var nodes: go.Iterator<go.Node> = fromPort.findNodesOutOf( null );
-
-
-        var maxRow: number = 0;
-
-        while ( nodes.next() ) {
-            var outOfNode:go.Node = nodes.value;
-            var row: number = outOfNode.data.row;
-            maxRow = Math.max( row, maxRow )
-        }
-
-        nodes = toPort.findNodesInto( null )
-
-
-
-        while ( nodes.next() ) {
-            var outOfNode:go.Node = nodes.value;
-            var row: number = outOfNode.data.row;
-            maxRow = Math.max( row, maxRow )
-        }
-
-
-
-
-        var fromPortRow: number = fromPort.data.row as number;
-        var toPortRow: number = toPort.data.row as number;
-        var fromPortColumn: number = fromPort.data.column as number;
-        var toPortColumn: number = toPort.data.column as number;
-
-        var firstName: string = "" + nodeDataArray.length
-        var secondName: string = "" + ( nodeDataArray.length + 1 )
-
-        myDiagram.model.addNodeData( { key: "" + firstName, color: "lightblue", column: fromPortColumn, row: ( maxRow + 1 ) } )
-        myDiagram.model.addNodeData( { key: "" + secondName, color: "lightblue", column: toPortColumn, row: ( maxRow + 1 ) } )
-
-        linkModel.addLinkData( { from: fromPort.key as string, to: firstName } );
-        linkModel.addLinkData( { from: firstName, to: secondName } );
-        linkModel.addLinkData( { from: secondName, to: toPort.key as string } );
-
-        myDiagram.remove( link )
-
-
-
-    } );
 
     // define a simple Node template
     myDiagram.nodeTemplate =
@@ -171,6 +122,9 @@ function delay() {
         nodeDataArray,
         nodeLinkArray );
     myDiagram.model = linkModel;
+    
+    diagramProcessing=new DiagramOperationsProcessing(myDiagram,nodeDataArray,linkModel)
+    myDiagram.addDiagramListener( "LinkDrawn", ( e: go.DiagramEvent ) =>diagramProcessing.processAddTheNewLink(e));
 
 }
 
