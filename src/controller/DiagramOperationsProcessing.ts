@@ -1,5 +1,5 @@
 import * as go from "gojs";
-
+import {FoundNodesLinks} from './../tools/FoundNodesLinks'
 /*
 * http://usejsdoc.org/
 */
@@ -8,7 +8,7 @@ export class DiagramOperationsProcessing {
     nodeDataArray: Array<go.ObjectData>;
     linkModel: go.GraphLinksModel;
 
-    constructor( myDiagram: go.Diagram, nodeDataArray: Array<go.ObjectData> , linkModel: go.GraphLinksModel ) {
+    constructor( myDiagram: go.Diagram, nodeDataArray: Array<go.ObjectData>, linkModel: go.GraphLinksModel ) {
         this.myDiagram = myDiagram;
         this.nodeDataArray = nodeDataArray;
         this.linkModel = linkModel;
@@ -62,6 +62,26 @@ export class DiagramOperationsProcessing {
         this.linkModel.addLinkData( { from: secondName, to: toPort.key as string } );
 
         this.myDiagram.remove( link )
+
+    }
+
+    public clickOnLink( l: go.Link ) {
+
+        var from = l.fromNode;
+        var to = l.toNode;
+       
+        var nodeName: string = "" + this.nodeDataArray.length;
+        var row:number=from.data.row;
+        var column:number=to.data.column
+        var links=FoundNodesLinks.foundNodesWithColumnOrMore(this.myDiagram,column)
+        links.forEach(node=>node.column=node.column+1)
+       
+       
+        this.myDiagram.model.addNodeData( { key: "" + nodeName, color: "lightblue", row:row,column:column } )
+
+        this.linkModel.addLinkData( { from: from.key as string, to: nodeName } );
+        this.linkModel.addLinkData( { from: nodeName as string, to: to.key } );
+        this.myDiagram.remove( l )
 
     }
 }

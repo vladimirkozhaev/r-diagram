@@ -55,7 +55,7 @@ function delay() {
                     { column: 0, row: 1 },
                     $( go.Shape,  // the "A" port
                         {
-                            width: 6, height: 6, portId: "A", toSpot: go.Spot.Right,
+                            width: 1, height: 1, portId: "A", toSpot: go.Spot.Right,
                             fromLinkable: true, toMaxLinks: 1, toLinkable: true,
                         } ),  // allow user-drawn links from here
                     $( go.TextBlock, "In" )  // "A" port label
@@ -94,17 +94,7 @@ function delay() {
             {
 
                 click: ( e, link ) => {
-                    var l: go.Link = link as go.Link;
-                    var from = l.fromNode;
-                    var to = l.toNode;
-                    var sort: number = nodeDataArray.length;
-                    var nodeName: string = "" + sort
-
-                    myDiagram.model.addNodeData( { key: "" + nodeName, color: "lightblue", sort: sort } )
-
-                    linkModel.addLinkData( { from: from.key as string, to: nodeName } );
-                    linkModel.addLinkData( { from: nodeName as string, to: to.key } );
-                    myDiagram.remove( l )
+                    diagramProcessing.clickOnLink(link as go.Link)
                 }
             }
         );
