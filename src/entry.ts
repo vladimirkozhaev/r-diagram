@@ -1,10 +1,6 @@
 import * as go from "gojs";
-import * as figures from './Figures';
-import { MultiArrowLink } from './MultiArrowLink'
-import { ParallelLayout } from './ParallelLayout'
-import { ParallelRouteLink } from './ParallelRouteLink';
 import { RLayout } from './RLayout';
-import {DiagramOperationsProcessing} from './controller/DiagramOperationsProcessing'
+import { DiagramOperationsProcessing } from './controller/DiagramOperationsProcessing'
 
 
 
@@ -17,8 +13,8 @@ function delay() {
 
     var $ = go.GraphObject.make;  // for conciseness in defining templates
 
-    var diagramProcessing:DiagramOperationsProcessing;
-    
+    var diagramProcessing: DiagramOperationsProcessing;
+
     var myDiagram = $( go.Diagram, "myDiagramDiv",  // create a Diagram for the DIV HTML element
         {
             initialAutoScale: go.Diagram.UniformToFill,
@@ -34,46 +30,42 @@ function delay() {
     myDiagram.nodeTemplate =
         $( go.Node, "Auto",  // the Shape will go around the TextBlock
 
-            $( go.Shape, "RoundedRectangle", { strokeWidth: 0, fill: "white" },
+            $( go.Shape, "Circle", { strokeWidth: 0, fill: "white", desiredSize: new go.Size( 20, 20 ) },
 
                 // Shape.fill is bound to Node.data.color
                 new go.Binding( "fill", "color" ) ),
             $( go.Panel, "Table",
                 $( go.RowColumnDefinition,
-                    { column: 0, alignment: go.Spot.Left } ),
+                    { column: 0, alignment: go.Spot.Center } ),
                 $( go.RowColumnDefinition,
-                    { column: 1, alignment: go.Spot.Right } ),
+                    { column: 1, alignment: go.Spot.Center } ),
                 $( go.RowColumnDefinition,
-                    { column: 2, alignment: go.Spot.Right } ),
-//                $( go.TextBlock,  // the node title
-//                    {
-//                        column: 0, row: 0, columnSpan: 3, alignment: go.Spot.Center,
-//                        font: "bold 10pt sans-serif", margin: new go.Margin( 4, 2 )
-//                    },
-//                    new go.Binding( "text", "key" ) ),
+                    { column: 2, alignment: go.Spot.Center } ),
+
                 $( go.Panel, "Horizontal",
-                    { column: 0, row: 1 },
+                    { column: 0, row: 0 },
                     $( go.Shape,  // the "A" port
                         {
                             width: 10, height: 10, portId: "A", toSpot: go.Spot.Right,
                             fromLinkable: true, toMaxLinks: 1, toLinkable: true,
                         } ),  // allow user-drawn links from here
-                    
+
                 ),
                 $( go.TextBlock, "Click",
-                        {
+                    {
 
-                            column: 0, row: 2,
-                            click: function( e, node ) {
-                                diagramProcessing.nodeClick(node.panel.panel as go.Node)
-                               
+                        column: 0, row: 1,
+                        click: function( e, node ) {
+                            diagramProcessing.nodeClick( node.panel.panel as go.Node )
 
-                            }
+
                         }
-                    )
+                    }
+
+                )
 
 
-                ) );
+            ) );
 
     myDiagram.linkTemplate =
         $( go.Link,
@@ -89,7 +81,7 @@ function delay() {
             {
 
                 click: ( e, link ) => {
-                    diagramProcessing.clickOnLink(link as go.Link)
+                    diagramProcessing.clickOnLink( link as go.Link )
                 }
             }
         );
@@ -107,9 +99,9 @@ function delay() {
         nodeDataArray,
         nodeLinkArray );
     myDiagram.model = linkModel;
-    
-    diagramProcessing=new DiagramOperationsProcessing(myDiagram,nodeDataArray,linkModel)
-    myDiagram.addDiagramListener( "LinkDrawn", ( e: go.DiagramEvent ) =>diagramProcessing.processAddTheNewLink(e));
+
+    diagramProcessing = new DiagramOperationsProcessing( myDiagram, nodeDataArray, linkModel )
+    myDiagram.addDiagramListener( "LinkDrawn", ( e: go.DiagramEvent ) => diagramProcessing.processAddTheNewLink( e ) );
 
 }
 
