@@ -45,40 +45,35 @@ function delay() {
                     { column: 1, alignment: go.Spot.Right } ),
                 $( go.RowColumnDefinition,
                     { column: 2, alignment: go.Spot.Right } ),
-                $( go.TextBlock,  // the node title
-                    {
-                        column: 0, row: 0, columnSpan: 3, alignment: go.Spot.Center,
-                        font: "bold 10pt sans-serif", margin: new go.Margin( 4, 2 )
-                    },
-                    new go.Binding( "text", "key" ) ),
+//                $( go.TextBlock,  // the node title
+//                    {
+//                        column: 0, row: 0, columnSpan: 3, alignment: go.Spot.Center,
+//                        font: "bold 10pt sans-serif", margin: new go.Margin( 4, 2 )
+//                    },
+//                    new go.Binding( "text", "key" ) ),
                 $( go.Panel, "Horizontal",
                     { column: 0, row: 1 },
                     $( go.Shape,  // the "A" port
                         {
-                            width: 1, height: 1, portId: "A", toSpot: go.Spot.Right,
+                            width: 10, height: 10, portId: "A", toSpot: go.Spot.Right,
                             fromLinkable: true, toMaxLinks: 1, toLinkable: true,
                         } ),  // allow user-drawn links from here
-                    $( go.TextBlock, "In" )  // "A" port label
+                    
                 ),
                 $( go.TextBlock, "Click",
-                    {
-                        column: 0, row: 2,
-                        click: function( e, node ) {
+                        {
 
-                            var n: go.Node = node.panel.panel as go.Node;
-                            var nodeName: string = "" + nodeDataArray.length
+                            column: 0, row: 2,
+                            click: function( e, node ) {
+                                diagramProcessing.nodeClick(node.panel.panel as go.Node)
+                               
 
-                            myDiagram.model.addNodeData( { key: "" + nodeName, color: "lightblue", layer: "" + ( nodeDataArray.length + 1 ) } )
-
-                            linkModel.addLinkData( { from: n.key as string, to: nodeName } );
-
-
+                            }
                         }
-                    }
-                )
+                    )
 
 
-            ) );
+                ) );
 
     myDiagram.linkTemplate =
         $( go.Link,

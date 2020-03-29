@@ -13,6 +13,16 @@ export class DiagramOperationsProcessing {
         this.nodeDataArray = nodeDataArray;
         this.linkModel = linkModel;
     }
+    
+    public nodeClick(n:go.Node){
+        if (!n.findLinksOutOf(null).hasNext()){
+            var nodeName: string = "" + this.nodeDataArray.length
+
+            this.myDiagram.model.addNodeData( { key: "" + nodeName, color: "lightblue", row: n.data.row,column:(n.data.column+1)} )
+
+            this.linkModel.addLinkData( { from: n.key as string, to: nodeName } );
+        }
+    }
 
     public processAddTheNewLink( e: go.DiagramEvent ) {
         var link: go.Link = e.subject as go.Link
