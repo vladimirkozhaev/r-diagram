@@ -31,8 +31,9 @@ export class DiagramOperationsProcessing {
 
         if ( fromPort.data.column != toPort.data.column ) {
 
-
-
+            fromPort=FoundNodesLinks.foundNodeColumnWithLastRow(this.myDiagram, fromPort.data.column)
+            toPort=FoundNodesLinks.foundNodeColumnWithLastRow(this.myDiagram, toPort.data.column)
+           
             var nodes: go.Iterator<go.Node> = fromPort.findNodesOutOf( null );
 
 
@@ -86,7 +87,7 @@ export class DiagramOperationsProcessing {
         var row: number = from.data.row;
         var column: number = to.data.column
         var links = FoundNodesLinks.foundNodesWithColumnOrMore( this.myDiagram, column )
-        links.forEach( node => node.column = node.column + 1 )
+        links.forEach( node => node.data.column = node.data.column + 1 )
 
 
         this.myDiagram.model.addNodeData( { key: "" + nodeName, color: "lightblue", row: row, column: column } )

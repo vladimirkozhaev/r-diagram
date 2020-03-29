@@ -20,7 +20,7 @@ export class FoundNodesLinks {
         return nodeDataArray.filter(el=>{
             var node:go.Node=el as go.Node;
             
-            return node.column>=columnNum
+            return node.column==columnNum
         }).sort((a,b)=>b.row-a.row).map(nodeObj=>myDiagram.findNodeForKey(nodeObj.key))[0] as go.Node;
     }
 }   
