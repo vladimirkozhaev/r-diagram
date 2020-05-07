@@ -16,7 +16,7 @@ export class RLayout extends go.Layout {
             if (this.network === null) this.network = this.makeNetwork(coll);
             // assign LayoutVertex.bounds to all vertexes in the network:
             var vit = this.network.vertexes.iterator;
-           
+         
             while (vit.next()) {
               var v = vit.value;
               var node:go.Node=vit.value.node;
