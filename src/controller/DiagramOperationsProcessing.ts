@@ -39,7 +39,7 @@ export class DiagramOperationsProcessing {
         var endColumn=toPort.data.column
         var endRow=toPort.data.row
         this.nodesUtil.processDragNDrop(startColumn, startRow, endColumn, endRow);
-
+        
 
         this.myDiagram.remove( link )
 

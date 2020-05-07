@@ -11,15 +11,17 @@ export class NodesUtil {
     }
 
 
-    public doesLineIntersectNodesOrHorizontalRow( startC, endC, row ): boolean {
-
-        return ( ( ( endC - startC > 2 ) && ( this.isLineIntersectNode( startC, endC, row ) ) ) || ( this.isLineIntersectEdges( startC, endC, row ) ) );
+    public doesLineIntersectNodesOrHorizontalRow( startC:number, endC:number, row:number ): boolean {
+        var isLineIntersectNode:boolean=( endC - startC > 2 ) && ( this.isLineIntersectNode( startC, endC, row ) );
+        var isLineIntersectEdges:boolean=this.isLineIntersectEdges( startC, endC, row )
+        alert("startC:"+startC+", endC:"+endC+"row:"+row+", isLineIntersectNode:"+isLineIntersectNode+", isLineIntersectEdges:"+isLineIntersectEdges)
+        return isLineIntersectNode || isLineIntersectEdges;
 
     }
 
     public createOrGetConnectionNode( columnNum: number, rowNum: number ): go.Node {
         // item 55
-        var newNodeOnEndColumn: go.Node = this.myDiagram.nodes.filter( node => node.row == rowNum && node.column == columnNum ).first()
+        var newNodeOnEndColumn: go.Node = this.myDiagram.nodes.filter( node => this.getDataOrObject(node)["row"] == rowNum && this.getDataOrObject(node)["column"] == columnNum ).first()
 
         if ( newNodeOnEndColumn != null ) {
 
@@ -51,9 +53,9 @@ export class NodesUtil {
                 startR++
 
 
-            } while ( this.doesLineIntersectNodesOrHorizontalRow( startC, endC, startR ) )
+            } while (  this.doesLineIntersectNodesOrHorizontalRow( startC, endC, startR ) )
 
-
+           
             // item 37
 
             var startNode = this.createOrGetConnectionNode( startC, startR )
@@ -99,8 +101,8 @@ export class NodesUtil {
     }
 
     public isLineIntersectEdges( startC: number, endC: number, row: number ): boolean {
-        return this.myDiagram.links.filter(( l: go.Link ) => l.fromNode.row == row && l.fromNode.column == startC
-            && l.toNode.row == row && l.toNode.column == endC ).count > 0;
+        return this.myDiagram.links.filter(( l: go.Link ) => this.getDataOrObject(l.fromNode)["row"] == row && this.getDataOrObject(l.fromNode)["column"] == startC
+            && this.getDataOrObject(l.toNode)["row"] == row && this.getDataOrObject(l.toNode)["column"] == endC ).count > 0;
     }
     public isLineIntersectNode( startC: number, endC: number, row: number ): boolean {
         return this.myDiagram.nodes.filter(( node: go.Node ) => this.getDataOrObject( node )["row"] == row && this.getDataOrObject( node )["column"] >= startC && this.getDataOrObject( node )["column"] <= endC ).count > 0
