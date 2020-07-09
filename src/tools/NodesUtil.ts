@@ -14,7 +14,7 @@ export class NodesUtil {
     public doesLineIntersectNodesOrHorizontalRow( startC:number, endC:number, row:number ): boolean {
         var isLineIntersectNode:boolean=( endC - startC > 2 ) && ( this.isLineIntersectNode( startC, endC, row ) );
         var isLineIntersectEdges:boolean=this.isLineIntersectEdges( startC, endC, row )
-        alert("startC:"+startC+", endC:"+endC+"row:"+row+", isLineIntersectNode:"+isLineIntersectNode+", isLineIntersectEdges:"+isLineIntersectEdges)
+       
         return isLineIntersectNode || isLineIntersectEdges;
 
     }
@@ -32,6 +32,7 @@ export class NodesUtil {
         // item 57
         var nodeToConnect = this.foundLastNodeOnTheColumn( columnNum )
         // item 58
+       
         this.connectNodes( nodeToConnect, newNodeOnEndColumn )
 
 
@@ -90,7 +91,8 @@ export class NodesUtil {
         )
 
         var l = new go.List( sortedObject )
-        var lastNode: go.Node = l.sort(( a: go.Node, b: go.Node ) => this.getDataOrObject( b )["column"] - this.getDataOrObject( a )["column"] ).first();
+        var lastNode: go.Node = l.sort(( a: go.Node, b: go.Node ) => this.getDataOrObject( b )["row"] - this.getDataOrObject( a )["row"] ).first();
+        alert("last node to the column:("+this.getDataOrObject( lastNode )["column"]+","+this.getDataOrObject( lastNode )["row"]+") node size:"+l.size)
         return lastNode;
 
     }

@@ -1,67 +1,24 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Basic GoJS Sample</title>
-<meta name="description"
-	content="Interactive GoJS diagram demonstrating creating new nodes and links, reconnecting links, grouping and ungrouping, and context menus and tooltips for nodes, for links, and for the diagram background." />
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- Copyright 1998-2020 by Northwoods Software Corporation. -->
-
-<script src="https://unpkg.com/gojs/release/go-debug.js"></script>
-
-<!-- this is only for the GoJS Samples framework -->
-
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jointjs/2.1.0/joint.css" />
 </head>
 <body>
-	<div id="sample">
-		<div
-			style="width: 100%; display: flex; justify-content: space-between">
-			<div id="myPaletteDiv"
-				style="width: 105px; margin-right: 2px; background-color: whitesmoke; border: solid 1px black"></div>
-			<div id="myDiagramDiv"
-				style="flex-grow: 1; height: 620px; border: solid 1px black"></div>
-		</div>
-		<p>This sample demonstrates the ability for the user to drag
-			around a Link as if it were a Node. When either end of the link
-			passes over a valid port, the port is highlighted.</p>
-		<p>
-			The link-dragging functionality is enabled by setting some or all of
-			the following properties: <a>DraggingTool.dragsLink</a>, <a>LinkingTool.isUnconnectedLinkValid</a>,
-			and <a>RelinkingTool.isUnconnectedLinkValid</a>.
-		</p>
-		<p>
-			Note that a Link is present in the <a>Palette</a> so that it too can
-			be dragged out and onto the main Diagram. Because links are not
-			automatically routed when either end is not connected with a Node,
-			the route is provided explicitly when that Palette item is defined.
-		</p>
-		<p>
-			This also demonstrates several custom Adornments: <a>Part.selectionAdornmentTemplate</a>,
-			<a>Part.resizeAdornmentTemplate</a>, and <a>Part.rotateAdornmentTemplate</a>.
-		</p>
-		<p>
-			Finally this sample demonstrates saving and restoring the <a>Diagram.position</a>
-			as a property on the <a>Model.modelData</a> object that is
-			automatically saved and restored when calling <a>Model.toJson</a> and
-			<a>Model,fromJson</a>.
-		</p>
-		<div>
-			<div>
-				<button id="SaveButton" onclick="save()">Save</button>
-				<button onclick="load()">Load</button>
-				Diagram Model saved in JSON format:
-			</div>
-			<textarea id="mySavedModel" style="width: 100%; height: 300px">{ "class": "go.GraphLinksModel",
-  "linkFromPortIdProperty": "fromPort",
-  "linkToPortIdProperty": "toPort",
-  "nodeDataArray": [
- ],
-  "linkDataArray": [
- ]}
-    </textarea>
-		</div>
-	</div>
+    <!-- content -->
+    <div id="myholder"></div>
+
+    <!-- dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.3/backbone.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jointjs/2.1.0/joint.js"></script>
+
+    <!-- code -->
+    <script type="text/javascript">
+
+        
+
+	</script>
 	<script src="./output/entry.js" />
 </body>
 </html>
