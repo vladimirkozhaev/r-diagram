@@ -1,6 +1,4 @@
 
-import { RLayout } from './RLayout';
-import { DiagramOperationsProcessing } from './controller/DiagramOperationsProcessing'
 import * as joint from 'jointjs';
 
 
@@ -23,11 +21,19 @@ function delay() {
     });
 
 
+paper.on('cell:pointerdblclick', function(cellView) {
+    var isElement = cellView.model.isElement();
+    var message = (isElement ? 'Element' : 'Link') + ' clicked';
+    info.attr('label/text', message);
 
+    info.attr('body/visibility', 'visible');
+    info.attr('label/visibility', 'visible');
+});
 
-    paper.on('cell:pointerclick', function (cellView) {
-        alert("Hello")
-    });
+ 
+//	clientMatrix('cell:pointerclick', function (cellView) {
+//        alert("Hello")
+//    });
 
     var rect = new joint.shapes.standard.Rectangle();
     rect.position(100, 30);
@@ -44,7 +50,8 @@ function delay() {
     rect.addTo(graph);
 
     var rect2 = rect.clone();
-    rect2.translate(300, 0);
+  
+	
     rect2.attr('label/text', 'World!');
     rect2.addTo(graph);
 
@@ -52,6 +59,7 @@ function delay() {
     link.source(rect);
     link.target(rect2);
     link.addTo(graph);
+	
 
 }
 

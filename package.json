@@ -7,11 +7,12 @@
     "dev": "nodemon --watch entry.ts --exec 'tsc --outDir output' entry.ts",
     "browser-sync": "browser-sync start --server --files output/*",
     "build": "webpack",
-    "start": "webpack --watch & live-server --port=8085"
+    "start": "concurrently \"webpack --watch\" \"live-server --port=8080 --open=public --entry-file=index.html \""
   },
   "devDependencies": {
+    "@types/backbone": "^1.4.2",
     "@types/d3": "5.7.2",
-    "gojs": "^2.1.15",
+    "jointjs": "3.1.1",
     "live-server": "^1.2.1",
     "ts-loader": "^6.2.1",
     "typescript": "^3.7.5",
@@ -28,7 +29,8 @@
   "homepage": "https://github.com/EcutDavid/flappy-bird-pixijs#readme",
   "dependencies": {
     "@types/jquery": "^3.3.32",
-    "pixi.js": "^5.2.0",
+    "concurrently": "^5.2.0",
+    "jointjs": "3.1.1",
     "ts-node": "^8.6.2"
   },
   "author": "",

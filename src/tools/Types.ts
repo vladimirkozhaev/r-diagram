@@ -1,1 +1,0 @@
-export type FilterMethod=(element:go.ObjectData)=>boolean;
