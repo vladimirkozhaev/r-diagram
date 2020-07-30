@@ -7,60 +7,78 @@ window.addEventListener("load", delay);
 
 function delay() {
 
-    // <script src="./output/entry.js" />
-
-
-    var graph = new joint.dia.Graph;
-
-    var paper: joint.dia.Paper = new joint.dia.Paper({
+   var graph = new joint.dia.Graph;
+    var paper = new joint.dia.Paper({
         el: document.getElementById('myholder'),
-        model: graph,
-        width: 600,
-        height: 100,
-        gridSize: 1
+        width: 650,
+        height: 200,
+        model: graph
     });
 
-
-paper.on('cell:pointerdblclick', function(cellView) {
-    var isElement = cellView.model.isElement();
-    var message = (isElement ? 'Element' : 'Link') + ' clicked';
-    info.attr('label/text', message);
-
-    info.attr('body/visibility', 'visible');
-    info.attr('label/visibility', 'visible');
-});
-
- 
-//	clientMatrix('cell:pointerclick', function (cellView) {
-//        alert("Hello")
-//    });
-
-    var rect = new joint.shapes.standard.Rectangle();
-    rect.position(100, 30);
-    rect.resize(100, 40);
-    rect.attr({
-        body: {
-            fill: 'blue'
-        },
-        label: {
-            text: 'Hello',
-            fill: 'white'
+    var el1 = new joint.shapes.standard.Rectangle({
+        position: { x: 50, y: 50 },
+        size: { width: 100, height: 40 },
+        attrs: {
+            body: {
+                strokeWidth: 5,
+                strokeOpacity: .7,
+                stroke: 'black',
+                rx: 3,
+                ry: 3,
+                fill: 'lightgray',
+                fillOpacity: .5
+            },
+            label: {
+                text: 'Drop me over B',
+                fontSize: 10,
+                style: { 'text-shadow': '1px 1px 1px lightgray' }
+            }
         }
     });
-    rect.addTo(graph);
 
-    var rect2 = rect.clone();
-  
+    var el2:joint.shapes.standard.Rectangle = el1.clone() as joint.shapes.standard.Rectangle;
+	el2.attr('label/text', 'B');
 	
-    rect2.attr('label/text', 'World!');
-    rect2.addTo(graph);
-
-    var link = new joint.shapes.standard.Link();
-    link.source(rect);
-    link.target(rect2);
-    link.addTo(graph);
+	el2.position(200,50)
 	
+    graph.addCells([el1, el2]);
 
+    paper.on({
+
+        'element:pointerdown': function(elementView, evt) {
+
+            evt.data = elementView.model.position();
+        },
+
+        'element:pointerup': function(elementView, evt, x, y) {
+
+            var coordinates = new joint.g.Point(x,y)
+            var elementAbove = elementView.model;
+            var elementBelow = this.model.findModelsFromPoint(coordinates).find(function(el) {
+                return (el.id !== elementAbove.id);
+            });
+
+            // If the two elements are connected already, don't
+            // connect them again (this is application-specific though).
+            if (elementBelow && graph.getNeighbors(elementBelow).indexOf(elementAbove) === -1) {
+
+                // Move the element to the position before dragging.
+                elementAbove.position(evt.data.x, evt.data.y);
+
+                // Create a connection between elements.
+                var link = new joint.shapes.standard.Link();
+                link.source(elementAbove);
+                link.target(elementBelow);
+                link.addTo(graph);
+
+                // Add remove button to the link.
+                var tools = new joint.dia.ToolsView({
+                    tools: [new joint.linkTools.Remove()]
+                });
+                link.findView(this).addTools(tools);
+            }
+        }
+    });
 }
 
 
