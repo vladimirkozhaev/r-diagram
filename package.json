@@ -10,9 +10,9 @@
     "start": "concurrently \"webpack --watch\" \"live-server --port=8080 --open=public --entry-file=index.html \""
   },
   "devDependencies": {
+    "backbone": "1.4.0",
     "@types/backbone": "^1.4.2",
     "@types/d3": "5.7.2",
-    "jointjs": "3.1.1",
     "live-server": "^1.2.1",
     "ts-loader": "^6.2.1",
     "typescript": "^3.7.5",
@@ -30,7 +30,7 @@
   "dependencies": {
     "@types/jquery": "^3.3.32",
     "concurrently": "^5.2.0",
-    "jointjs": "3.1.1",
+    "jointjs": "^3.2.0",
     "ts-node": "^8.6.2"
   },
   "author": "",
