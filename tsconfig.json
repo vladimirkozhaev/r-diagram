@@ -6,7 +6,9 @@
     },
     
     "include": [
-      "src/*",
+      "./src/*",
+      "./src/model*",
+      "./src/view*",
       "data/*"
     ]
   }

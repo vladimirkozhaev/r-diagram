@@ -1,8 +1,9 @@
+import * as B from 'Backbone';
 import {Vertex} from './Vertex'
 /*
 * http://usejsdoc.org/
 */
-class Edge{
+export class Edge extends B.Model{
 	_starVertex:Vertex;
 	_endVertex:Vertex;
 	

@@ -1,7 +1,7 @@
 /*
 * http://usejsdoc.org/
 */
-class Point {
+export class Point {
 	_x: number;
 	_y: number;
 	_canConnect:boolean;
