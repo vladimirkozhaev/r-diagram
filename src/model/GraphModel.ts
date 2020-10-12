@@ -3,10 +3,11 @@ import {Vertex} from "./Vertex"
 import {Point} from "./Point"
 
 
-export class GraphModel{
+export class GraphModel extends	 B.Model{
 	_vertex:B.Collection<Vertex> = new B.Collection<Vertex>(); 
 	
 	constructor(_vertex:B.Collection<Vertex>){
+		super()
 		this._vertex=_vertex;
 	}
 	

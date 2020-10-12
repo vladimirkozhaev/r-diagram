@@ -8,7 +8,7 @@ window.onload = () => delay();
 
 function delay() {
 
-	alert("Create the graph")
+	
 	var graph = new joint.dia.Graph;
 
 	var paper = new joint.dia.Paper({
@@ -35,7 +35,7 @@ function delay() {
 	graphModel.vertex.forEach(v => {
 		var source: joint.shapes.standard.Ellipse = new joint.shapes.standard.Ellipse();
 		source.position(v.point.x, v.point.y);
-		source.resize(120, 60);
+		source.resize(60, 60);
 		source.attr({
 			body: {
 				fill: 'white',
@@ -60,10 +60,7 @@ function delay() {
 		tools: [verticesTool, segmentsTool, boundaryTool]
 	});
 
-	//    var linkView = link.findView(paper);
-	//    linkView.addTools(toolsView);
-	//    linkView.hideTools();
-
+	
 
 }
 
