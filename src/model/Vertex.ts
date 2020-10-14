@@ -15,7 +15,7 @@ export class Vertex extends B.Model{
 		this._point=_point;
 	}
 	
-	get point():Point{
+	public get point():Point{
 		return this._point;
 	}
 	

@@ -6,16 +6,17 @@ import {Point} from "./Point"
 export class GraphModel extends	 B.Model{
 	_vertex:B.Collection<Vertex> = new B.Collection<Vertex>(); 
 	
-	constructor(_vertex:B.Collection<Vertex>){
+	constructor(v:B.Collection<Vertex>){
 		super()
-		this._vertex=_vertex;
+		alert("vertex inside the constructor:"+v)
+		this._vertex=v;
 	}
 	
-	get vertex():B.Collection<Vertex>{
+	public get vertex():B.Collection<Vertex>{
 		return this._vertex;
 	}
 	
-	static createTestModel():GraphModel{
+	public static createTestModel():GraphModel{
 		var vertex:B.Collection<Vertex> = new B.Collection<Vertex>()
 		vertex.add(new Vertex(new Point(0,0,true)))
 		vertex.add(new Vertex(new Point(100,0,true)))
