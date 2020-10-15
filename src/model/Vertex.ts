@@ -13,11 +13,24 @@ export class Vertex extends B.Model{
 	constructor(_point:Point){
 		super();
 		this._point=_point;
+		this._startEdges=new B.Collection<Edge>()
+		this._endEdges=new B.Collection<Edge>()
 	}
 	
 	public get point():Point{
 		return this._point;
 	}
 	
+	public get startEdges():B.Collection<Edge>{
+		return this._startEdges
+	}
+	
+	public get endEdges():B.Collection<Edge>{
+		return this._endEdges
+	}
+	
+	public toString():String{
+		return "point "+this._point.toString();
+	}
 }
 

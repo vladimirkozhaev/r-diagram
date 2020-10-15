@@ -32,4 +32,8 @@ export class Point {
 	get canConnect(){
 		return this._canConnect;
 	}
+	
+	public toString():String{
+		return "point:"+this._x+" "+this._y
+	}
 }
