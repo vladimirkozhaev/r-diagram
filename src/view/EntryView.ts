@@ -51,12 +51,12 @@ export class EntryView extends B.View<B.Model> {
 			source.addTo(graph);
 
 		}).forEach(v => {
-				alert("add  edges"+v.startEdges.size()+" >>>"+v.endEdges.size())
+				
 				v.startEdges.forEach(e => {
 				var link:joint.shapes.standard.Link = new joint.shapes.standard.Link();
 				var source:VertexView=this._vertexDictionary.getValue(v)
 				link.source(source);
-				var target:VertexView=this._vertexDictionary.getValue(e.endVertex)
+				
 				link.target(target)
 				link.addTo(graph)
 				
