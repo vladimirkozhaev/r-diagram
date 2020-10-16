@@ -1,28 +1,39 @@
 import * as B from 'Backbone';
-import {Vertex} from './Vertex'
+import { Vertex } from './Vertex'
+import { Point } from './Point'
 /*
 * http://usejsdoc.org/
 */
-export class Edge extends B.Model{
-	_starVertex:Vertex;
-	_endVertex:Vertex;
-	
-	public set startVertex(_startVertex:Vertex){
-		this._starVertex=_startVertex;
+export class Edge extends B.Model {
+	_starVertex: Vertex;
+	_endVertex: Vertex;
+	_points: B.Collection<Point>;
+
+	constructor() {
+		super()
+		this._points = new B.Collection<Point>();
 	}
-	
-	public set endVertex(_endVertex:Vertex){
-		this._endVertex=_endVertex;
+
+	public set startVertex(_startVertex: Vertex) {
+		this._starVertex = _startVertex;
 	}
-	
-	
-	public get startVertex():Vertex {
+
+	public set endVertex(_endVertex: Vertex) {
+		this._endVertex = _endVertex;
+	}
+
+
+	public get startVertex(): Vertex {
 		return this._endVertex;
 	}
-	
-	public get endVertex():Vertex {
+
+	public get endVertex(): Vertex {
 		return this._endVertex;
 	}
-	
+
+	public get points(): B.Collection<Point> {
+		return this._points;
+	}
+
 
 }

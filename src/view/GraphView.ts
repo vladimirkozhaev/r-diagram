@@ -6,21 +6,20 @@ import { VertexView } from './VertexView'
 import { Point } from "./../model/Point"
 import * as Collections from 'typescript-collections';
 
-export class EntryView extends B.View<B.Model> {
+export class GraphView extends B.View<B.Model> {
 
 	_graphModel: GraphModel;
-	_vertexDictionary:Collections.Dictionary<Vertex,VertexView>;
+	_vertexDictionary: Collections.Dictionary<Vertex, VertexView>;
+
 	constructor(options?: B.ViewOptions<B.Model>) {
 		super(options);
-
-
 	}
-	
+
 	initialize() {
-		
 		this._graphModel = GraphModel.createTestModel();
 		this.render();
 	}
+
 	render() {
 
 		var graph = new joint.dia.Graph;
@@ -28,8 +27,8 @@ export class EntryView extends B.View<B.Model> {
 		var paper = new joint.dia.Paper({
 			el: document.getElementById('paper-custom-elements'),
 			model: graph,
-			width: 600,
-			height: 300,
+			width: 1200,
+			height: 800,
 			gridSize: 10,
 			drawGrid: true,
 			background: {
@@ -43,23 +42,48 @@ export class EntryView extends B.View<B.Model> {
 			}
 		)
 		var vertex = this._graphModel.vertex;
-		this._vertexDictionary=new Collections.Dictionary();
+		this._vertexDictionary = new Collections.Dictionary();
 		vertex.forEach(v => {
 			var source: VertexView = new VertexView(v);
-			
-			this._vertexDictionary.setValue(v,source)
+
+			this._vertexDictionary.setValue(v, source)
 			source.addTo(graph);
 
 		}).forEach(v => {
-				
-				v.startEdges.forEach(e => {
-				var link:joint.shapes.standard.Link = new joint.shapes.standard.Link();
-				var source:VertexView=this._vertexDictionary.getValue(v)
+
+			v.startEdges.forEach(e => {
+				var link: joint.shapes.standard.Link = new joint.shapes.standard.Link();
+
+				var source: VertexView = this._vertexDictionary.getValue(v)
 				link.source(source);
-				
+
+				var target: VertexView = this._vertexDictionary.getValue(e.endVertex)
 				link.target(target)
-				link.addTo(graph)
 				
+				
+				
+				if (e.points.size() > 0) {
+					var vertices = []
+					//vertices.push({ x: v.point.x*100+200, y: v.point.y*100+200 })
+					var strAlert:String=""
+					e.points.forEach(p => {
+
+
+						vertices.push({ x: p.x * 100 + 205, y: p.y * 100 + 200 });
+						strAlert+="vert coords("+(p.x * 100 + 205)+","+(p.y * 100 + 200) +"\n";
+					})
+					
+					alert(strAlert)
+					//vertices.push({ x: e.endVertex.point.x*100+200, y: e.endVertex.point.y*100+200 })
+
+
+					link.vertices(vertices);
+
+				}
+
+
+				link.addTo(graph)
+
 			})
 		});
 

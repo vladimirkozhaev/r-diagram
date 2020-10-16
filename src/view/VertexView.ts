@@ -9,8 +9,8 @@ export class VertexView extends joint.shapes.standard.Ellipse {
 	constructor(vertex: Vertex) {
 		super()
 		this._vertex = vertex;
-		this.position(this._vertex.point.x, this._vertex.point.y);
-		this.resize(60, 60);
+		this.position(this._vertex.point.x*100+200, this._vertex.point.y*100+200);
+		this.resize(10, 10);
 		this.attr({
 			body: {
 				fill: 'white',

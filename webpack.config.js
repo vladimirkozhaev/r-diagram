@@ -1,6 +1,6 @@
 const path = require('path');
 module.exports = {
-  entry: './src/view/entry.ts',
+  entry: './src/view/run.ts',
   module: {
     rules: [
       {
@@ -14,7 +14,7 @@ module.exports = {
     extensions: [ '.ts', '.tsx', '.js' ]
   },
   output: {
-    filename: 'entry.js',
+    filename: 'run.js',
     path: path.resolve(__dirname, 'output')
   },
   mode: 'development'
