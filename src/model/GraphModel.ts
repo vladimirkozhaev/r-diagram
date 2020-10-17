@@ -1,7 +1,7 @@
 import * as B from 'Backbone';
 import { Vertex } from "./Vertex"
 import { Point } from "./Point"
-import { Edge } from "./Edge"
+import { LinkModel } from "./LinkModel"
 
 
 export class GraphModel extends B.Model {
@@ -21,16 +21,16 @@ export class GraphModel extends B.Model {
 		var vertex: B.Collection<Vertex> = new B.Collection<Vertex>()
 		var start: Vertex = new Vertex(new Point(0, 0, true));
 		var end: Vertex = new Vertex(new Point(1, 0, true));
-		var edge: Edge;
+		var edge: LinkModel;
 
-		edge = new Edge();
+		edge = new LinkModel();
 		start.startEdges.add(edge)
 		end.endEdges.add(edge)
 		edge.startVertex = start;
 		edge.endVertex = end;
 
 
-		edge = new Edge();
+		edge = new LinkModel();
 		edge.startVertex = start;
 		edge.endVertex = end;
 		edge.points.add(new Point(0, 1, false))
@@ -39,7 +39,7 @@ export class GraphModel extends B.Model {
 		end.endEdges.add(edge)
 
 
-		edge = new Edge();
+		edge = new LinkModel();
 		edge.startVertex = end;
 		edge.endVertex = start;
 		edge.points.add(new Point(1, -1, false))
@@ -47,7 +47,7 @@ export class GraphModel extends B.Model {
 		start.endEdges.add(edge)
 		end.startEdges.add(edge)
 
-		edge = new Edge();
+		edge = new LinkModel();
 		edge.startVertex = start;
 		edge.endVertex = end;
 		edge.points.add(new Point(0, 2, false))

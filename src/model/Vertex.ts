@@ -1,21 +1,21 @@
 import * as B from 'Backbone';
 import {Point} from "./Point"
-import {Edge} from "./Edge"
+import {LinkModel} from "./LinkModel"
 
 /*
 * http://usejsdoc.org/
 */
 export class Vertex extends B.Model{
 	_point:Point;
-	_startEdges:B.Collection<Edge>
-	_endEdges:B.Collection<Edge>
+	_startEdges:B.Collection<LinkModel>
+	_endEdges:B.Collection<LinkModel>
 	_vertices:B.Collection<Point>
 	
 	constructor(_point:Point){
 		super();
 		this._point=_point;
-		this._startEdges=new B.Collection<Edge>()
-		this._endEdges=new B.Collection<Edge>()
+		this._startEdges=new B.Collection<LinkModel>()
+		this._endEdges=new B.Collection<LinkModel>()
 		
 	}
 	
@@ -23,11 +23,11 @@ export class Vertex extends B.Model{
 		return this._point;
 	}
 	
-	public get startEdges():B.Collection<Edge>{
+	public get startEdges():B.Collection<LinkModel>{
 		return this._startEdges
 	}
 	
-	public get endEdges():B.Collection<Edge>{
+	public get endEdges():B.Collection<LinkModel>{
 		return this._endEdges
 	}
 	

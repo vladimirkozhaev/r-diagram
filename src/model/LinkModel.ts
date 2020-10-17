@@ -4,7 +4,7 @@ import { Point } from './Point'
 /*
 * http://usejsdoc.org/
 */
-export class Edge extends B.Model {
+export class LinkModel extends B.Model {
 	_starVertex: Vertex;
 	_endVertex: Vertex;
 	_points: B.Collection<Point>;
