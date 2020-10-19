@@ -26,6 +26,7 @@ export class VertexView extends joint.shapes.standard.Ellipse {
 		
 	}
 	
+	
 	public toString():String{
 		return "vertex view:"+this._vertex.toString();
 	}

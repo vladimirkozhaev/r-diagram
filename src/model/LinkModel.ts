@@ -34,6 +34,10 @@ export class LinkModel extends B.Model {
 	public get points(): B.Collection<Point> {
 		return this._points;
 	}
+	
+	public toString(){
+		return this._starVertex+" "+this._endVertex
+	}
 
 
 }
