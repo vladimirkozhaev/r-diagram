@@ -37,20 +37,7 @@ export class GraphView extends B.View<B.Model> {
 			background: {
 				color: 'rgba(255, 165, 0, 0.3)'
 			},
-			//			linkView: joint.dia.LinkView.extend({
-			//				pointerclick: function(evt: joint.dia.Event, x, y) {
-			//					var linkView:MyLink = this.model as MyLink
-			//				
-			//					var linkModel: LinkModel = linkView.linkModel
-			//					var startVertex: Vertex = linkModel.startVertex
-			//					var endVertex: Vertex = linkModel.endVertex
-			//
-			//					var startVertexView: VertexView = vd.getValue(startVertex)
-			//					var endVertexView: VertexView = vd.getValue(startVertex)
-			//					
-			//					this.model.remove();
-			//				}
-			//			}),
+			
 
 
 
@@ -88,28 +75,6 @@ export class GraphView extends B.View<B.Model> {
 				var target: VertexView = this._vertexDictionary.getValue(e.endVertex)
 				linkView.target(target)
 
-
-
-				if (e.points.size() > 0) {
-					var vertices = []
-					//vertices.push({ x: v.point.x*100+200, y: v.point.y*100+200 })
-
-					e.points.forEach(p => {
-
-
-						vertices.push({ x: p.x * 100 + 205, y: p.y * 100 + 200 });
-
-					})
-
-
-					//vertices.push({ x: e.endVertex.point.x*100+200, y: e.endVertex.point.y*100+200 })
-
-
-					linkView.vertices(vertices);
-
-				}
-
-
 				linkView.addTo(graph)
 
 			})
@@ -124,7 +89,7 @@ export class GraphView extends B.View<B.Model> {
 			tools: [verticesTool, segmentsTool, boundaryTool]
 		});
 
-
+		
 		return this;
 	}
 }

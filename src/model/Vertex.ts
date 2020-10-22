@@ -34,5 +34,14 @@ export class Vertex extends B.Model{
 	public toString():String{
 		return "point "+this._point.toString();
 	}
+	
+	public getPoints():B.Collection<Point>{
+		var collection:B.Collection<Point>=new B.Collection();	
+		collection.add(this._point)
+		this._startEdges.forEach(edge=>{
+			collection.add(edge.points)
+		})
+		return collection;
+	}
 }
 
