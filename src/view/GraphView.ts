@@ -45,14 +45,14 @@ export class GraphView extends B.View<B.Model> {
 
 		paper.on("link:pointerdblclick", linkView => {
 
-
+			
 			var linkModel: LinkModel = linkView.model.linkModel
 			var startVertex: Vertex = linkModel.startVertex
 			var endVertex: Vertex = linkModel.endVertex
 
 			var startVertexView: VertexView = this._vertexDictionary.getValue(startVertex)
 			var endVertexView: VertexView = this._vertexDictionary.getValue(startVertex)
-			alert("startVertexView:"+startVertexView+", endVertexView:"+endVertexView)
+			alert(">>>"+this._graphModel.points.size())
 			linkView.remove();
 		})
 

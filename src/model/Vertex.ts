@@ -2,6 +2,7 @@ import * as B from 'Backbone';
 import {Point} from "./Point"
 import {LinkModel} from "./LinkModel"
 
+
 /*
 * http://usejsdoc.org/
 */
@@ -35,13 +36,17 @@ export class Vertex extends B.Model{
 		return "point "+this._point.toString();
 	}
 	
-	public getPoints():B.Collection<Point>{
-		var collection:B.Collection<Point>=new B.Collection();	
-		collection.add(this._point)
-		this._startEdges.forEach(edge=>{
-			collection.add(edge.points)
-		})
-		return collection;
+	public get points():B.Collection<Point>{
+		var initCol:B.Collection<Point>=new B.Collection();	
+		initCol.add(this._point)
+		var thePoints= this._startEdges.foldl((collection:B.Collection<Point>,edge:LinkModel)=>{
+			return edge.points.foldl((c:B.Collection<Point>,p:Point)=>{
+				c.add(p)
+				return c;
+			},collection);
+		}, initCol)		
+		
+		return thePoints;
 	}
 }
 

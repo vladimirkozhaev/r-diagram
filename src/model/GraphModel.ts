@@ -16,6 +16,18 @@ export class GraphModel extends B.Model {
 	public get vertex(): B.Collection<Vertex> {
 		return this._vertex;
 	}
+	
+	public get points(){
+		
+		
+		return this._vertex.foldl((a:B.Collection<Point>,vertex:Vertex)=>{
+			a.add(vertex.point)
+			return vertex.points.foldl((a1:B.Collection<Point>,b1:Point)=>{
+				a1.add(b1)
+				return a1},a);
+		},new B.Collection<Point>())
+		
+	}
 
 	public static createTestModel(): GraphModel {
 		var vertex: B.Collection<Vertex> = new B.Collection<Vertex>()
