@@ -1,12 +1,13 @@
 import * as B from 'Backbone';
 import {Point} from "./Point"
 import {LinkModel} from "./LinkModel"
+import {IPointsContainer} from './IPointsContainer'
 
 
 /*
 * http://usejsdoc.org/
 */
-export class Vertex extends B.Model{
+export class Vertex extends B.Model implements IPointsContainer{
 	_point:Point;
 	_startEdges:B.Collection<LinkModel>
 	_endEdges:B.Collection<LinkModel>

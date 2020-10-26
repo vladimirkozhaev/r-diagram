@@ -52,7 +52,14 @@ export class GraphView extends B.View<B.Model> {
 
 			var startVertexView: VertexView = this._vertexDictionary.getValue(startVertex)
 			var endVertexView: VertexView = this._vertexDictionary.getValue(startVertex)
-			alert(">>>"+this._graphModel.points.size())
+			var filteredPoints=this._graphModel.points.filter(point=>{return point.x>startVertex.point.x})
+			
+			this._graphModel.points.filter(point=>{return point.x>startVertex.point.x}).forEach(
+				p=>{
+					
+					p.x+=1					
+				}
+			)
 			linkView.remove();
 		})
 

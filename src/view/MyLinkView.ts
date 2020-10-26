@@ -29,7 +29,7 @@ export class MyLinkView extends joint.dia.LinkView {
 
 		var startVertexView: VertexView = this._vertexDictionary.getValue(startVertex)
 		var endVertexView: VertexView = this._vertexDictionary.getValue(startVertex)
-		this._graphModel.points
+		
 		this.model.remove();
 	}
 

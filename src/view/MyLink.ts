@@ -10,27 +10,29 @@ export class MyLink extends joint.shapes.standard.Link {
 	constructor(lm: LinkModel) {
 		super()
 		this._linkModel = lm
-		this._linkModel.on("change", e => { alert("change link model") })
-
+		
 		if (this._linkModel.points.size() > 0) {
-			var vertices = []
-
-			this._linkModel.points.forEach(p => {
-
-
-				vertices.push({ x: p.x * 100 + 205, y: p.y * 100 + 200 });
-
-			})
-			
-			this.vertices(vertices);
+			this.updateVertices();
 
 		}
-
+		
+		this._linkModel.points.forEach(p => {
+           p.on("x:changed",p=>this.updateVertices())
+			p.on("y:changed",p=>this.updateVertices())
+        })
 	}
 
-	protected pointerclick(evt: joint.dia.Event, x: number, y: number) {
-		alert("click")
-	}
+    private updateVertices() {
+        var vertices = [];
+        this._linkModel.points.forEach(p => {
+            vertices.push({ x: p.x * 100 + 205, y: p.y * 100 + 200 });
+        });
+        this.vertices(vertices);
+    }
+
+    
+
+	
 
 	public get linkModel(): LinkModel {
 		return this._linkModel
