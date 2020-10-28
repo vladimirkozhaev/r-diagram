@@ -35,14 +35,12 @@ export class Point extends B.Model {
 
 	set x(_x: number) {
 		this._x = _x;
-		alert("change x:"+this._x)
 		this.trigger("x:changed",this._x)
 	}
 
 
 	set y(_y: number) {
-		this._y = _y
-		
+		this._y = _y		
 		this.trigger("y:changed",this._y)
 	}
 
