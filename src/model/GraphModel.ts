@@ -16,6 +16,16 @@ export class GraphModel extends B.Model {
 	public get vertex(): B.Collection<Vertex> {
 		return this._vertex;
 	}
+	/**
+	 * @returns true if we haven't vertex with this coords	
+	 */
+	public addVertex(vertex:Vertex):boolean{
+		if (this._vertex.filter(v=>v.point.x==vertex.point.x&&v.point.y==vertex.point.y).length>0){
+			return false
+		}
+		this._vertex.add(vertex)
+		return true;
+	}
 	
 	public get points(){
 		
