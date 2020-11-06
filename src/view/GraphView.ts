@@ -20,14 +20,14 @@ export class GraphView extends B.View<B.Model> {
 
 	public initialize() {
 		this._graphModel = GraphModel.createTestModel();
-		
+
 		this.render();
 	}
 
-	public get vertexDictionary():Collections.Dictionary<Vertex, VertexView>{
+	public get vertexDictionary(): Collections.Dictionary<Vertex, VertexView> {
 		return this._vertexDictionary;
 	}
-	
+
 	render() {
 
 		var graph = new joint.dia.Graph;
@@ -49,30 +49,18 @@ export class GraphView extends B.View<B.Model> {
 		});
 
 		paper.on("link:pointerdblclick", linkViewToClick => {
-
-
 			this.insertVertexToTheLink(linkViewToClick, graph);
-
 		})
 
 		var vertex = this._graphModel.vertex;
 		this._vertexDictionary = new Collections.Dictionary();
 		vertex.forEach(v => {
-			var source: VertexView = new VertexView(v);
-
-			this._vertexDictionary.setValue(v, source)
-			source.addTo(graph);
+			this.addVertexView(v, graph);
 
 		}).forEach(v => {
 
 			v.startEdges.forEach(e => {
-				var startVertex:Vertex=v
-				var endVertex:Vertex=e.endVertex;
-				
-				var source: VertexView = this._vertexDictionary.getValue(v)
-				var target: VertexView = this._vertexDictionary.getValue(e.endVertex)
-
-				this.addLinkView(e, source, target, graph);
+				this.addEdgeOfVertex(v, e, graph);
 
 			})
 		});
@@ -90,52 +78,65 @@ export class GraphView extends B.View<B.Model> {
 		return this;
 	}
 
-    private insertVertexToTheLink(linkViewToClick: any, graph: joint.dia.Graph) {
-        var linkModel: LinkModel = linkViewToClick.model.linkModel;
-        var startVertex: Vertex = linkModel.startVertex;
-        var endVertex: Vertex = linkModel.endVertex;
-        var startVertexView: VertexView = this._vertexDictionary.getValue(startVertex);
-        var endVertexView: VertexView = this._vertexDictionary.getValue(startVertex);
-        var filteredPoints = this._graphModel.points.filter(point => { return point.x > startVertex.point.x; });
-        this._graphModel.points.filter(point => { return point.x > startVertex.point.x; }).forEach(p => {
-            p.x += 1;
-        });
+	private addEdgeOfVertex(v: Vertex, e: LinkModel, graph: joint.dia.Graph) {
+		var startVertex: Vertex = v;
+		var endVertex: Vertex = e.endVertex;
+		var source: VertexView = this._vertexDictionary.getValue(v);
+		var target: VertexView = this._vertexDictionary.getValue(e.endVertex);
+		this.addLinkView(e, source, target, graph);
+	}
 
-        var vertexToAdd: Vertex = new Vertex(new Point(startVertex.point.x + 1, startVertex.point.y, true));
-        var rightEdge = new LinkModel();
-        endVertex.endEdges.add(rightEdge);
-        vertexToAdd.endEdges.add(rightEdge);
-        var vertexViewToAdd: VertexView = new VertexView(vertexToAdd);
-        this._vertexDictionary.setValue(vertexToAdd, vertexViewToAdd);
-        vertexViewToAdd.addTo(graph);
-        var leftEdge = new LinkModel();
-        var leftEdgeView: MyLink = new MyLink(leftEdge);
-        leftEdgeView.addTo(graph);
-        leftEdgeView.source(this._vertexDictionary.getValue(startVertex));
-        leftEdgeView.target(vertexViewToAdd);
-        leftEdgeView.addTo(graph);
-        startVertex.startEdges.add(leftEdge);
-        vertexToAdd.endEdges.add(leftEdge);
-        leftEdge.startVertex = startVertex;
-        leftEdge.endVertex = vertexToAdd;
+	private addVertexView(v: Vertex, graph: joint.dia.Graph): VertexView {
+		var source: VertexView = new VertexView(v);
+		this._vertexDictionary.setValue(v, source);
+		source.addTo(graph);
+		return source;
+	}
 
-		var rightEdgeView: MyLink = new MyLink(rightEdge);
-        rightEdgeView.addTo(graph);
-        rightEdgeView.target(this._vertexDictionary.getValue(endVertex));
-        rightEdgeView.source(vertexViewToAdd);
-        rightEdgeView.addTo(graph);
-        endVertex.endEdges.add(rightEdge);
-        vertexToAdd.startEdges.add(rightEdge);
-        rightEdge.startVertex = vertexToAdd;
-        leftEdge.endVertex = endVertex;
-        
-        linkViewToClick.remove();
-    }
+	private insertVertexToTheLink(linkViewToClick: any, graph: joint.dia.Graph) {
+		var linkModel: LinkModel = linkViewToClick.model.linkModel;
+		var startVertex: Vertex = linkModel.startVertex;
+		var endVertex: Vertex = linkModel.endVertex;
+		var startVertexView: VertexView = this._vertexDictionary.getValue(startVertex);
+		var endVertexView: VertexView = this._vertexDictionary.getValue(endVertex);
+		
+		this.movePointToRightFromX(startVertex.point.x);
 
-    private addLinkView(e: LinkModel, source: VertexView, target: VertexView, graph: joint.dia.Graph) {
-        var linkView: MyLink = new MyLink(e);
-        linkView.source(source);
-        linkView.target(target);
-        linkView.addTo(graph);
-    }
+		var vertexToAdd: Vertex = new Vertex(new Point(startVertex.point.x + 1, startVertex.point.y, true));
+		
+		var rightEdge=this.connectVertex(vertexToAdd,endVertex)
+		var vertexViewToAdd: VertexView = this.addVertexView(vertexToAdd, graph)
+
+		var leftEdge = this.connectVertex(startVertex, vertexToAdd);
+
+		
+		var leftEdgeView: MyLink = this.addLinkView(leftEdge, this._vertexDictionary.getValue(startVertex), vertexViewToAdd, graph)
+		var rightEdgeView: MyLink = this.addLinkView(rightEdge, vertexViewToAdd, this._vertexDictionary.getValue(endVertex), graph)
+
+		
+		linkViewToClick.remove();
+	}
+
+	private movePointToRightFromX(x:number) {
+		this._graphModel.points.filter(point => { return point.x > x; }).forEach(p => {
+			p.x += 1;
+		});
+	}
+
+	private connectVertex(startVertex: Vertex, endVertex: Vertex) {
+		var link = new LinkModel();
+		startVertex.startEdges.add(link);
+		endVertex.endEdges.add(link);
+		link.startVertex=startVertex
+		link.endVertex=endVertex;
+		return link;
+	}
+
+	private addLinkView(e: LinkModel, source: VertexView, target: VertexView, graph: joint.dia.Graph) {
+		var linkView: MyLink = new MyLink(e);
+		linkView.source(source);
+		linkView.target(target);
+		linkView.addTo(graph);
+		return linkView;
+	}
 }
