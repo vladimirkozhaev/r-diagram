@@ -103,6 +103,7 @@ export class GraphView extends B.View<B.Model> {
 		this.movePointToRightFromX(startVertex.point.x);
 
 		var vertexToAdd: Vertex = new Vertex(new Point(startVertex.point.x + 1, startVertex.point.y, true));
+		this._graphModel.addVertex(vertexToAdd)
 		
 		var rightEdge=this.connectVertex(vertexToAdd,endVertex)
 		var vertexViewToAdd: VertexView = this.addVertexView(vertexToAdd, graph)
@@ -110,8 +111,8 @@ export class GraphView extends B.View<B.Model> {
 		var leftEdge = this.connectVertex(startVertex, vertexToAdd);
 
 		
-		var leftEdgeView: MyLink = this.addLinkView(leftEdge, this._vertexDictionary.getValue(startVertex), vertexViewToAdd, graph)
-		var rightEdgeView: MyLink = this.addLinkView(rightEdge, vertexViewToAdd, this._vertexDictionary.getValue(endVertex), graph)
+		var leftEdgeView: MyLink = this.addLinkView(leftEdge, startVertexView, vertexViewToAdd, graph)
+		var rightEdgeView: MyLink = this.addLinkView(rightEdge, vertexViewToAdd, endVertexView, graph)
 
 		
 		linkViewToClick.remove();
