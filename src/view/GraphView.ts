@@ -103,14 +103,14 @@ export class GraphView extends B.View<B.Model> {
 		var startVertex: Vertex = linkModel.startVertex;
 		var endVertex: Vertex = linkModel.endVertex;
 
-		var leftToRight:boolean=endVertex.point.x-startVertex.point.x>0
-		
+		var leftToRight: boolean = endVertex.point.x - startVertex.point.x > 0
+
 
 		var startVertexView: VertexView = this._vertexDictionary.getValue(startVertex.cid);
 		var endVertexView: VertexView = this._vertexDictionary.getValue(endVertex.cid);
 
-		var xToMove:number=Math.min(startVertex.point.x,startVertex.point.y)
-		
+		var xToMove: number = Math.min(startVertex.point.x, endVertex.point.x)
+
 		this.movePointToRightFromX(xToMove);
 
 		var pointsToLeft: Point[] = linkModel.points.filter(p => p.x <= xToMove)
@@ -122,10 +122,10 @@ export class GraphView extends B.View<B.Model> {
 		var vertexToAdd: Vertex = new Vertex(new Point(xToMove + 1, pointY, true));
 		this._graphModel.addVertex(vertexToAdd)
 
-		var rightEdge = this.connectVertex(vertexToAdd, endVertex, leftToRight?pointsToRight:pointsToLeft)
+		var rightEdge = this.connectVertex(vertexToAdd, endVertex, leftToRight ? pointsToRight : pointsToLeft)
 		var vertexViewToAdd: VertexView = this.addVertexView(vertexToAdd, graph)
 
-		var leftEdge = this.connectVertex(startVertex, vertexToAdd,leftToRight?pointsToLeft:pointsToRight);
+		var leftEdge = this.connectVertex(startVertex, vertexToAdd, leftToRight ? pointsToLeft : pointsToRight);
 
 
 		var leftEdgeView: MyLink = this.addLinkView(leftEdge, startVertexView, vertexViewToAdd, graph)
