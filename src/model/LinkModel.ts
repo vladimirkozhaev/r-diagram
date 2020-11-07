@@ -1,7 +1,7 @@
 import * as B from 'Backbone';
 import { Vertex } from './Vertex'
 import { Point } from './Point'
-import {IPointsContainer} from './IPointsContainer'
+import { IPointsContainer } from './IPointsContainer'
 /*
 * http://usejsdoc.org/
 */
@@ -11,7 +11,7 @@ export class LinkModel extends B.Model implements IPointsContainer {
 	_points: B.Collection<Point>;
 
 	constructor() {
-		super() 
+		super()
 		this._points = new B.Collection<Point>();
 	}
 
@@ -35,9 +35,13 @@ export class LinkModel extends B.Model implements IPointsContainer {
 	public get points(): B.Collection<Point> {
 		return this._points;
 	}
-	
-	public toString(){
-		return this._startVertex +" "+this._endVertex
+
+	public set points(p: B.Collection<Point>) {
+		this._points = p;
+	}
+
+	public toString() {
+		return this._startVertex + " " + this._endVertex
 	}
 
 

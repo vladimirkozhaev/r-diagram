@@ -12,7 +12,7 @@ import * as Collections from 'typescript-collections';
 export class GraphView extends B.View<B.Model> {
 
 	_graphModel: GraphModel;
-	_vertexDictionary: Collections.Dictionary<Vertex, VertexView>;
+	_vertexDictionary: Collections.Dictionary<String, VertexView>;
 
 	constructor(options?: B.ViewOptions<B.Model>) {
 		super(options);
@@ -24,7 +24,7 @@ export class GraphView extends B.View<B.Model> {
 		this.render();
 	}
 
-	public get vertexDictionary(): Collections.Dictionary<Vertex, VertexView> {
+	public get vertexDictionary(): Collections.Dictionary<String, VertexView> {
 		return this._vertexDictionary;
 	}
 
@@ -48,8 +48,9 @@ export class GraphView extends B.View<B.Model> {
 
 		});
 
-		paper.on("link:pointerdblclick", linkViewToClick => {
-			this.insertVertexToTheLink(linkViewToClick, graph);
+		paper.on("link:pointerdblclick", (linkViewToClick,object,x,y) => {
+			
+			this.insertVertexToTheLink(linkViewToClick,x,y, graph);
 		})
 
 		var vertex = this._graphModel.vertex;
@@ -81,34 +82,42 @@ export class GraphView extends B.View<B.Model> {
 	private addEdgeOfVertex(v: Vertex, e: LinkModel, graph: joint.dia.Graph) {
 		var startVertex: Vertex = v;
 		var endVertex: Vertex = e.endVertex;
-		var source: VertexView = this._vertexDictionary.getValue(v);
-		var target: VertexView = this._vertexDictionary.getValue(e.endVertex);
+		var source: VertexView = this._vertexDictionary.getValue(v.cid);
+		var target: VertexView = this._vertexDictionary.getValue(e.endVertex.cid);
 		this.addLinkView(e, source, target, graph);
 	}
 
 	private addVertexView(v: Vertex, graph: joint.dia.Graph): VertexView {
 		var source: VertexView = new VertexView(v);
-		this._vertexDictionary.setValue(v, source);
+		this._vertexDictionary.setValue(v.cid, source);
 		source.addTo(graph);
 		return source;
 	}
 
-	private insertVertexToTheLink(linkViewToClick: any, graph: joint.dia.Graph) {
+	private insertVertexToTheLink(linkViewToClick: any,x:number,y:number, graph: joint.dia.Graph) {
+		
+		
 		var linkModel: LinkModel = linkViewToClick.model.linkModel;
 		var startVertex: Vertex = linkModel.startVertex;
 		var endVertex: Vertex = linkModel.endVertex;
-		var startVertexView: VertexView = this._vertexDictionary.getValue(startVertex);
-		var endVertexView: VertexView = this._vertexDictionary.getValue(endVertex);
+		var startVertexView: VertexView = this._vertexDictionary.getValue(startVertex.cid);
+		var endVertexView: VertexView = this._vertexDictionary.getValue(endVertex.cid);
 		
 		this.movePointToRightFromX(startVertex.point.x);
 
-		var vertexToAdd: Vertex = new Vertex(new Point(startVertex.point.x + 1, startVertex.point.y, true));
+		var pointsToLeft:Point[]=linkModel.points.filter(p=>p.x<=startVertex.point.x)
+		
+		var pointsToRight:Point[]=linkModel.points.filter(p=>p.x>startVertex.point.x)
+		
+		var pointY:number=Math.floor((y-200)/100)
+		
+		var vertexToAdd: Vertex = new Vertex(new Point(startVertex.point.x + 1, pointY, true));
 		this._graphModel.addVertex(vertexToAdd)
 		
-		var rightEdge=this.connectVertex(vertexToAdd,endVertex)
+		var rightEdge=this.connectVertex(vertexToAdd,endVertex,pointsToRight)
 		var vertexViewToAdd: VertexView = this.addVertexView(vertexToAdd, graph)
 
-		var leftEdge = this.connectVertex(startVertex, vertexToAdd);
+		var leftEdge = this.connectVertex(startVertex, vertexToAdd,pointsToLeft);
 
 		
 		var leftEdgeView: MyLink = this.addLinkView(leftEdge, startVertexView, vertexViewToAdd, graph)
@@ -124,12 +133,13 @@ export class GraphView extends B.View<B.Model> {
 		});
 	}
 
-	private connectVertex(startVertex: Vertex, endVertex: Vertex) {
+	private connectVertex(startVertex: Vertex, endVertex: Vertex,points:Point[]) {
 		var link = new LinkModel();
 		startVertex.startEdges.add(link);
 		endVertex.endEdges.add(link);
 		link.startVertex=startVertex
 		link.endVertex=endVertex;
+		link.points=new B.Collection<Point>(points);
 		return link;
 	}
 
