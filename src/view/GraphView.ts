@@ -52,6 +52,8 @@ export class GraphView extends B.View<B.Model> {
 
 			this.insertVertexToTheLink(linkViewToClick, x, y, graph);
 		})
+		
+		
 
 		var vertex = this._graphModel.vertex;
 		this._vertexDictionary = new Collections.Dictionary();
