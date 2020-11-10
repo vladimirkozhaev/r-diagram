@@ -20,8 +20,8 @@ export class VertexView extends joint.shapes.standard.Ellipse {
 			this.position(this._vertex.point.x*100+200, this._vertex.point.y*100+200);
 		})
 		
-		this.position(this._vertex.point.x*100+200, this._vertex.point.y*100+200);
-		this.resize(10, 10);
+		this.setPositionToModelPoint();
+		this.resize(30, 30);
 		this.attr({
 			body: {
 				fill: 'white',
@@ -37,7 +37,13 @@ export class VertexView extends joint.shapes.standard.Ellipse {
 		
 	}
 	
-	
+	public  get model():Vertex{
+		return this._vertex;
+	}
+	public setPositionToModelPoint() {
+		this.position(this._vertex.point.x * 100 + 200, this._vertex.point.y * 100 + 200);
+	}
+
 	public toString():String{
 		return "vertex view:"+this._vertex.toString();
 	}

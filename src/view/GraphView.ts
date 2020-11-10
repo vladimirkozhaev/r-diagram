@@ -13,6 +13,7 @@ export class GraphView extends B.View<B.Model> {
 
 	_graphModel: GraphModel;
 	_vertexDictionary: Collections.Dictionary<String, VertexView>;
+	_vertexViewToStart: VertexView = null;
 
 	constructor(options?: B.ViewOptions<B.Model>) {
 		super(options);
@@ -52,8 +53,53 @@ export class GraphView extends B.View<B.Model> {
 
 			this.insertVertexToTheLink(linkViewToClick, x, y, graph);
 		})
-		
-		
+
+		paper.on('element:pointerdown', (elementView, evt) => {
+
+			this._vertexViewToStart = elementView.model;
+
+		})
+
+		paper.on("blank:pointerup", () => {
+			alert("blank:pointerup")
+		})
+		paper.on('element:pointerup', (elementView, evt, x, y) => {
+
+			var vertexViews: VertexView[] = this._vertexDictionary.values();
+			var sourceModel: Vertex = elementView.model.model;
+			var sourceX: number = sourceModel.point.x;
+			var sourceY: number = sourceModel.point.y;
+
+			var vertexViewToEnd: VertexView = vertexViews.filter(vView => {
+				var vertexView: VertexView = vView as VertexView;
+				var targetVertex: Vertex = vertexView.model;
+				var targetX: number = targetVertex.point.x;
+				var targetY: number = targetVertex.point.y;
+
+				var posX: number = Math.round((x - 200) / 100);
+				var posY: number = Math.round((y - 200) / 100);
+
+				return posX == targetX&& posY==targetY 
+				&& (sourceX != targetX || sourceY != targetY);
+
+			}).pop()
+
+			if (this._vertexViewToStart != null && vertexViewToEnd != null) {
+				vertexViewToEnd.setPositionToModelPoint();
+				var points: Point[] = [new Point(0, 4, false), new Point(1, 4, false)]
+				var edgeToConnect: LinkModel = this.connectVertex(this._vertexViewToStart.model, vertexViewToEnd.model, points)
+				var leftEdgeView: MyLink = this.addLinkView(edgeToConnect, this._vertexViewToStart, vertexViewToEnd, graph)
+
+
+
+			}
+			this.setPositionToModelPointForAll()
+
+			this._vertexViewToStart = null;
+
+		}
+		)
+
 
 		var vertex = this._graphModel.vertex;
 		this._vertexDictionary = new Collections.Dictionary();
@@ -80,7 +126,11 @@ export class GraphView extends B.View<B.Model> {
 
 		return this;
 	}
-
+	private setPositionToModelPointForAll() {
+		this._vertexDictionary.forEach((key, value) => {
+			value.setPositionToModelPoint()
+		})
+	}
 	private addEdgeOfVertex(v: Vertex, e: LinkModel, graph: joint.dia.Graph) {
 		var startVertex: Vertex = v;
 		var endVertex: Vertex = e.endVertex;
@@ -143,7 +193,7 @@ export class GraphView extends B.View<B.Model> {
 		});
 	}
 
-	private connectVertex(startVertex: Vertex, endVertex: Vertex, points: Point[]) {
+	private connectVertex(startVertex: Vertex, endVertex: Vertex, points: Point[]): LinkModel {
 		var link = new LinkModel();
 		startVertex.startEdges.add(link);
 		endVertex.endEdges.add(link);
