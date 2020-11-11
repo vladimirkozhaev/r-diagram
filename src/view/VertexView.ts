@@ -1,7 +1,7 @@
 import * as joint from 'jointjs';
 import * as B from 'Backbone';
 import { Vertex } from './../model/Vertex'
-
+import * as Consts from './Consts'
 
 
 export class VertexView extends joint.shapes.standard.Ellipse {
@@ -12,12 +12,12 @@ export class VertexView extends joint.shapes.standard.Ellipse {
 		
 		this._vertex.point.on("x:changed",x=>{
 			
-			this.position(this._vertex.point.x*100+200, this._vertex.point.y*100+200);
+			this.setPositionToModelPoint();
 		})
 		
 		this._vertex.point.on("y:changed",y=>{
 			
-			this.position(this._vertex.point.x*100+200, this._vertex.point.y*100+200);
+			this.setPositionToModelPoint()
 		})
 		
 		this.setPositionToModelPoint();
@@ -37,11 +37,13 @@ export class VertexView extends joint.shapes.standard.Ellipse {
 		
 	}
 	
+   
+
 	public  get model():Vertex{
 		return this._vertex;
 	}
 	public setPositionToModelPoint() {
-		this.position(this._vertex.point.x * 100 + 200, this._vertex.point.y * 100 + 200);
+		this.position(this._vertex.point.x * Consts.LINK_DISTANCE + Consts.X_SHIFT, this._vertex.point.y * Consts.LINK_DISTANCE + Consts.Y_SHIFT);
 	}
 
 	public toString():String{

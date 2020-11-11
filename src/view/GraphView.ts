@@ -6,6 +6,7 @@ import { VertexView } from './VertexView'
 import { Point } from "./../model/Point"
 import { MyLink } from './MyLink'
 import { LinkModel } from './../model/LinkModel'
+import * as Consts from './Consts'
 
 import * as Collections from 'typescript-collections';
 
@@ -76,17 +77,17 @@ export class GraphView extends B.View<B.Model> {
 				var targetX: number = targetVertex.point.x;
 				var targetY: number = targetVertex.point.y;
 
-				var posX: number = Math.round((x - 200) / 100);
-				var posY: number = Math.round((y - 200) / 100);
+				var posX: number = Math.round((x - Consts.X_SHIFT) / Consts.LINK_DISTANCE);
+				var posY: number = Math.round((y - Consts.Y_SHIFT) / Consts.LINK_DISTANCE);
 
-				return posX == targetX&& posY==targetY 
-				&& (sourceX != targetX || sourceY != targetY);
+				return posX == targetX && posY == targetY
+					&& (sourceX != targetX || sourceY != targetY);
 
 			}).pop()
 
 			if (this._vertexViewToStart != null && vertexViewToEnd != null) {
 				vertexViewToEnd.setPositionToModelPoint();
-				var points: Point[] = [new Point(0, 4, false), new Point(1, 4, false)]
+				var points: Point[] = [new Point(sourceX, 4, false), new Point(vertexViewToEnd.model.point.x, 4, false)]
 				var edgeToConnect: LinkModel = this.connectVertex(this._vertexViewToStart.model, vertexViewToEnd.model, points)
 				var leftEdgeView: MyLink = this.addLinkView(edgeToConnect, this._vertexViewToStart, vertexViewToEnd, graph)
 
@@ -169,7 +170,7 @@ export class GraphView extends B.View<B.Model> {
 
 		var pointsToRight: Point[] = linkModel.points.filter(p => p.x > xToMove)
 
-		var pointY: number = Math.floor((y - 200) / 100)
+		var pointY: number = Math.floor((y - Consts.Y_SHIFT) / Consts.LINK_DISTANCE)
 
 		var vertexToAdd: Vertex = new Vertex(new Point(xToMove + 1, pointY, true));
 		this._graphModel.addVertex(vertexToAdd)

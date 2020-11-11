@@ -51,4 +51,6 @@ export class Point extends B.Model {
 	public toString(): String {
 		return "point:" + this._x + " " + this._y
 	}
+	
+	
 }

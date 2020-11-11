@@ -4,6 +4,7 @@
 */
 import * as joint from 'jointjs';
 import { LinkModel } from "./../model/LinkModel"
+import * as Consts from './Consts'
 
 export class MyLink extends joint.shapes.standard.Link {
 	_linkModel: LinkModel;
@@ -25,7 +26,7 @@ export class MyLink extends joint.shapes.standard.Link {
     private updateVertices() {
         var vertices = [];
         this._linkModel.points.forEach(p => {
-            vertices.push({ x: p.x * 100 + 205, y: p.y * 100 + 200 });
+            vertices.push({ x: p.x * Consts.LINK_DISTANCE + Consts.X_SHIFT+Consts.VERTEX_VIEW_RADIUS/2, y: p.y * Consts.LINK_DISTANCE + Consts.Y_SHIFT+Consts.VERTEX_VIEW_RADIUS/2 });
         });
         this.vertices(vertices);
     }
