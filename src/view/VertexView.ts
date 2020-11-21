@@ -9,17 +9,17 @@ export class VertexView extends joint.shapes.standard.Ellipse {
 	constructor(vertex: Vertex) {
 		super()
 		this._vertex = vertex;
-		
-		this._vertex.point.on("x:changed",x=>{
-			
+
+		this._vertex.point.on("x:changed", x => {
+
 			this.setPositionToModelPoint();
 		})
-		
-		this._vertex.point.on("y:changed",y=>{
-			
+
+		this._vertex.point.on("y:changed", y => {
+
 			this.setPositionToModelPoint()
 		})
-		
+
 		this.setPositionToModelPoint();
 		this.resize(30, 30);
 		this.attr({
@@ -29,25 +29,25 @@ export class VertexView extends joint.shapes.standard.Ellipse {
 				strokeWidth: 2
 			},
 			label: {
-				text: '',
+				text: 'Hello',
 				fill: 'black'
 			}
 		});
-		
-		
-	}
-	
-   
 
-	public  get model():Vertex{
+
+	}
+
+
+
+	public get model(): Vertex {
 		return this._vertex;
 	}
 	public setPositionToModelPoint() {
-		this.position(this._vertex.point.x * Consts.LINK_DISTANCE + Consts.X_SHIFT, this._vertex.point.y * Consts.LINK_DISTANCE + Consts.Y_SHIFT);
+		this.position(this._vertex.point.x * Consts.X_CELL_SIZE + Consts.X_SHIFT, this._vertex.point.y * Consts.Y_CELL_SIZE + Consts.Y_SHIFT);
 	}
 
-	public toString():String{
-		return "vertex view:"+this._vertex.toString();
+	public toString(): String {
+		return "vertex view:" + this._vertex.toString();
 	}
-	
+
 }

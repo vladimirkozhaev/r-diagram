@@ -1,4 +1,4 @@
-import 'mocha';
+	import 'mocha';
 import { expect } from 'chai';
 import {GraphModel} from './../model/GraphModel'
 import {Point} from './../model/Point'

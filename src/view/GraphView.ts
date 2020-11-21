@@ -70,6 +70,8 @@ export class GraphView extends B.View<B.Model> {
 			var sourceModel: Vertex = elementView.model.model;
 			var sourceX: number = sourceModel.point.x;
 			var sourceY: number = sourceModel.point.y;
+			var posX: number = Math.round((x - Consts.X_SHIFT) / Consts.X_CELL_SIZE);
+			var posY: number = Math.round((y - Consts.Y_SHIFT) / Consts.Y_CELL_SIZE);
 
 			var vertexViewToEnd: VertexView = vertexViews.filter(vView => {
 				var vertexView: VertexView = vView as VertexView;
@@ -77,8 +79,7 @@ export class GraphView extends B.View<B.Model> {
 				var targetX: number = targetVertex.point.x;
 				var targetY: number = targetVertex.point.y;
 
-				var posX: number = Math.round((x - Consts.X_SHIFT) / Consts.LINK_DISTANCE);
-				var posY: number = Math.round((y - Consts.Y_SHIFT) / Consts.LINK_DISTANCE);
+				
 
 				return posX == targetX && posY == targetY
 					&& (sourceX != targetX || sourceY != targetY);
@@ -87,7 +88,8 @@ export class GraphView extends B.View<B.Model> {
 
 			if (this._vertexViewToStart != null && vertexViewToEnd != null) {
 				vertexViewToEnd.setPositionToModelPoint();
-				var points: Point[] = [new Point(sourceX, 4, false), new Point(vertexViewToEnd.model.point.x, 4, false)]
+				var freeY:number=this._graphModel.foundFreeHorizontal(sourceX,posX,posY,sourceModel.point.x<vertexViewToEnd.model.point.x)
+				var points: Point[] = [new Point(sourceX, freeY, false), new Point(vertexViewToEnd.model.point.x, freeY, false)]
 				var edgeToConnect: LinkModel = this.connectVertex(this._vertexViewToStart.model, vertexViewToEnd.model, points)
 				var leftEdgeView: MyLink = this.addLinkView(edgeToConnect, this._vertexViewToStart, vertexViewToEnd, graph)
 
@@ -170,7 +172,7 @@ export class GraphView extends B.View<B.Model> {
 
 		var pointsToRight: Point[] = linkModel.points.filter(p => p.x > xToMove)
 
-		var pointY: number = Math.floor((y - Consts.Y_SHIFT) / Consts.LINK_DISTANCE)
+		var pointY: number = Math.floor((y - Consts.Y_SHIFT) / Consts.Y_CELL_SIZE)
 
 		var vertexToAdd: Vertex = new Vertex(new Point(xToMove + 1, pointY, true));
 		this._graphModel.addVertex(vertexToAdd)
