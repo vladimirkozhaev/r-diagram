@@ -28,8 +28,8 @@ export class GraphModel extends B.Model {
 	}
 	
 	public isLineBetweenFree(startX:number,endX:number,y:number):boolean{
-		return this._vertex.filter(v=>{
-			return v.point.x>startX&&v.point.x<endX&&v.point.y==y
+		return this.points.filter(v=>{
+			return v.x>=startX&&v.x<=endX&&v.y==y
 		}).length==0
 	}
 	
