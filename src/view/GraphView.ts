@@ -150,8 +150,14 @@ export class GraphView extends B.View<B.Model> {
 		return source;
 	}
 
-	private needToMovePoints(x: number, y: number): boolean {
-		return true;
+	private needToMovePoints(startVertex: Vertex, endVertex: Vertex): boolean {
+
+		var startX: number = startVertex.point.x;
+		var endX: number = endVertex.point.x
+		var startY: number = startVertex.point.y;
+		var endY: number = endVertex.point.y
+
+		return Math.abs(startX - endX) <= 1;
 
 	}
 	private insertVertexToTheLink(linkViewToClick: any, x: number, y: number, graph: joint.dia.Graph) {
@@ -162,39 +168,41 @@ export class GraphView extends B.View<B.Model> {
 
 		var startVertex: Vertex = linkModel.startVertex;
 		var endVertex: Vertex = linkModel.endVertex;
+		var startVertexView: VertexView = this._vertexDictionary.getValue(startVertex.cid);
+		var endVertexView: VertexView = this._vertexDictionary.getValue(endVertex.cid);
 
 		var leftToRight: boolean = endVertex.point.x - startVertex.point.x > 0
 
-		if (this.needToMovePoints(x, y)) {
-
-			var startVertexView: VertexView = this._vertexDictionary.getValue(startVertex.cid);
-			var endVertexView: VertexView = this._vertexDictionary.getValue(endVertex.cid);
-
-			var xToMove: number = Math.min(startVertex.point.x, endVertex.point.x)
+		var xToMove: number = Math.min(startVertex.point.x, endVertex.point.x)
+		
+		if (this.needToMovePoints(startVertex, endVertex)) {
 
 			this.movePointToRightFromX(xToMove);
 
-			var pointsToLeft: Point[] = linkModel.points.filter(p => p.x <= xToMove)
 
-			var pointsToRight: Point[] = linkModel.points.filter(p => p.x > xToMove)
-
-			var pointY: number = Math.floor((y - Consts.Y_SHIFT) / Consts.Y_CELL_SIZE)
-
-			var vertexToAdd: Vertex = new Vertex(new Point(xToMove + 1, pointY, true));
-			this._graphModel.addVertex(vertexToAdd)
-
-			var rightEdge = this.connectVertex(vertexToAdd, endVertex, leftToRight ? pointsToRight : pointsToLeft)
-			var vertexViewToAdd: VertexView = this.addVertexView(vertexToAdd, graph)
-
-			var leftEdge = this.connectVertex(startVertex, vertexToAdd, leftToRight ? pointsToLeft : pointsToRight);
-
-
-			var leftEdgeView: MyLink = this.addLinkView(leftEdge, startVertexView, vertexViewToAdd, graph)
-			var rightEdgeView: MyLink = this.addLinkView(rightEdge, vertexViewToAdd, endVertexView, graph)
-
-
-			linkViewToClick.remove();
 		}
+
+
+		var pointsToLeft: Point[] = linkModel.points.filter(p => p.x <= xToMove)
+
+		var pointsToRight: Point[] = linkModel.points.filter(p => p.x > xToMove)
+
+		var pointY: number = Math.floor((y - Consts.Y_SHIFT) / Consts.Y_CELL_SIZE)
+
+		var vertexToAdd: Vertex = new Vertex(new Point(xToMove + 1, pointY, true));
+		this._graphModel.addVertex(vertexToAdd)
+
+		var rightEdge = this.connectVertex(vertexToAdd, endVertex, leftToRight ? pointsToRight : pointsToLeft)
+		var vertexViewToAdd: VertexView = this.addVertexView(vertexToAdd, graph)
+
+		var leftEdge = this.connectVertex(startVertex, vertexToAdd, leftToRight ? pointsToLeft : pointsToRight);
+
+
+		var leftEdgeView: MyLink = this.addLinkView(leftEdge, startVertexView, vertexViewToAdd, graph)
+		var rightEdgeView: MyLink = this.addLinkView(rightEdge, vertexViewToAdd, endVertexView, graph)
+
+
+		linkViewToClick.remove();
 	}
 
 	private movePointToRightFromX(x: number) {
