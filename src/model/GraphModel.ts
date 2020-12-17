@@ -34,6 +34,11 @@ export class GraphModel extends B.Model {
 	}
 	
 	public foundFreeHorizontal(startX:number,endX:number,y:number,down:boolean):number{
+		if (!down){
+			var temp=startX
+			startX=endX
+			endX=temp
+		}
 		while(!this.isLineBetweenFree(startX,endX,y)){
 			y=down?y+1:y-1;
 		}
