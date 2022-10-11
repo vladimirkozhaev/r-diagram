@@ -4,10 +4,10 @@ import { Point } from "./Point"
 import { LinkModel } from "./LinkModel"
 
 
-const START_X=0;
-const START_Y=0;
-const END_X=1;
-const END_Y=0;
+const START_X = 0;
+const START_Y = 0;
+const END_X = 1;
+const END_Y = 0;
 export class GraphModel extends B.Model {
 	_vertex: B.Collection<Vertex> = new B.Collection<Vertex>();
 	constructor(v: B.Collection<Vertex>) {
@@ -22,57 +22,58 @@ export class GraphModel extends B.Model {
 	/**
 	 * @returns true if we haven't vertex with this coords	
 	 */
-	public addVertex(vertex:Vertex):boolean{
-		if (this._vertex.filter(v=>v.point.x==vertex.point.x&&v.point.y==vertex.point.y).length>0){
+	public addVertex(vertex: Vertex): boolean {
+		if (this._vertex.filter(v => v.point.x == vertex.point.x && v.point.y == vertex.point.y).length > 0) {
 			return false
 		}
 		this._vertex.add(vertex)
 		return true;
 	}
-	
-	public isLineBetweenFree(startX:number,endX:number,y:number):boolean{
-		return this.points.filter(v=>{
-			return v.x>=startX&&v.x<=endX&&v.y==y
-		}).length==0
+
+	public isLineBetweenFree(startX: number, endX: number, y: number): boolean {
+		return this.points.filter(v => {
+			return v.x >= startX && v.x <= endX && v.y == y
+		}).length == 0
 	}
-	
-	public foundFreeHorizontal(startX:number,endX:number,y:number,down:boolean):number{
-		if (!down){
-			var temp=startX
-			startX=endX
-			endX=temp
+
+	public foundFreeHorizontal(startX: number, endX: number, y: number, down: boolean): number {
+		if (!down) {
+			var temp = startX
+			startX = endX
+			endX = temp
 		}
-		while(!this.isLineBetweenFree(startX,endX,y)){
-			y=down?y+1:y-1;
+		while (!this.isLineBetweenFree(startX, endX, y)) {
+			y = down ? y + 1 : y - 1;
 		}
 		return y
 	}
-	
-	
-	public get points(){
-		
-		
-		return this._vertex.foldl((a:B.Collection<Point>,vertex:Vertex)=>{
+
+
+	public get points() {
+
+
+		return this._vertex.foldl((a: B.Collection<Point>, vertex: Vertex) => {
 			a.add(vertex.point)
-			return vertex.points.foldl((a1:B.Collection<Point>,b1:Point)=>{
+			return vertex.points.foldl((a1: B.Collection<Point>, b1: Point) => {
 				a1.add(b1)
-				return a1},a);
-		},new B.Collection<Point>())
-		
+				return a1
+			}, a);
+		}, new B.Collection<Point>())
+
 	}
 
 	public static createTestModel(): GraphModel {
 		var vertex: B.Collection<Vertex> = new B.Collection<Vertex>()
 
-		GraphModel.addTwoPoins(vertex,START_X,START_Y,END_X,END_Y);
+		GraphModel.addTwoPoins(vertex, START_X, START_Y, END_X, END_Y);
 
-		GraphModel.addTwoPoins(vertex,START_X,START_Y+5,END_X,END_Y+5);
-		
-		
+		GraphModel.addTwoPoins(vertex, START_X, START_Y + 5, END_X, END_Y + 5);
+
+
 		return new GraphModel(vertex);
 	}
 
-	private static addTwoPoins(vertex: B.Collection<Vertex>,x1:number,y1:number,x2:number,y2:number):void {
+	private static addTwoPoins(vertex: B.Collection<Vertex>, x1: number, y1: number, x2: number, y2: number): void {
 		var start: Vertex = new Vertex(new Point(x1, y1, true));
 		var end: Vertex = new Vertex(new Point(x2, y2, true));
 		var edge: LinkModel;
