@@ -36,7 +36,7 @@
   "dependencies": {
     "@types/jquery": "3.3.32",
     "concurrently": "5.2.0",
-    "jointjs": "3.2.0"
+    "jointjs": "3.4.2"
   },
   "author": "",
   "license": "ISC",
