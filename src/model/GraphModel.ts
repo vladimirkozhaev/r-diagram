@@ -4,9 +4,12 @@ import { Point } from "./Point"
 import { LinkModel } from "./LinkModel"
 
 
+const START_X=0;
+const START_Y=0;
+const END_X=1;
+const END_Y=0;
 export class GraphModel extends B.Model {
 	_vertex: B.Collection<Vertex> = new B.Collection<Vertex>();
-
 	constructor(v: B.Collection<Vertex>) {
 		super()
 
@@ -60,13 +63,23 @@ export class GraphModel extends B.Model {
 
 	public static createTestModel(): GraphModel {
 		var vertex: B.Collection<Vertex> = new B.Collection<Vertex>()
-		var start: Vertex = new Vertex(new Point(0, 0, true));
-		var end: Vertex = new Vertex(new Point(1, 0, true));
+
+		GraphModel.addTwoPoins(vertex,START_X,START_Y,END_X,END_Y);
+
+		GraphModel.addTwoPoins(vertex,START_X,START_Y+5,END_X,END_Y+5);
+		
+		
+		return new GraphModel(vertex);
+	}
+
+	private static addTwoPoins(vertex: B.Collection<Vertex>,x1:number,y1:number,x2:number,y2:number):void {
+		var start: Vertex = new Vertex(new Point(x1, y1, true));
+		var end: Vertex = new Vertex(new Point(x2, y2, true));
 		var edge: LinkModel;
 
 		edge = new LinkModel();
-		start.startEdges.add(edge)
-		end.endEdges.add(edge)
+		start.startEdges.add(edge);
+		end.endEdges.add(edge);
 		edge.startVertex = start;
 		edge.endVertex = end;
 
@@ -74,30 +87,29 @@ export class GraphModel extends B.Model {
 		edge = new LinkModel();
 		edge.startVertex = start;
 		edge.endVertex = end;
-		edge.points.add(new Point(0, 1, false))
-		edge.points.add(new Point(1, 1, false))
-		start.startEdges.add(edge)
-		end.endEdges.add(edge)
+		edge.points.add(new Point(x1 + 0, y1 + 1, false));
+		edge.points.add(new Point(x1 + 1, y1 + 1, false));
+		start.startEdges.add(edge);
+		end.endEdges.add(edge);
 
 
 		edge = new LinkModel();
 		edge.startVertex = end;
 		edge.endVertex = start;
-		edge.points.add(new Point(1, -1, false))
-		edge.points.add(new Point(0, -1, false))
-		start.endEdges.add(edge)
-		end.startEdges.add(edge)
+		edge.points.add(new Point(x1 + 1, y1 - 1, false));
+		edge.points.add(new Point(x1 + 0, y1 - 1, false));
+		start.endEdges.add(edge);
+		end.startEdges.add(edge);
 
 		edge = new LinkModel();
 		edge.startVertex = start;
 		edge.endVertex = end;
-		edge.points.add(new Point(0, 2, false))
-		edge.points.add(new Point(1, 2, false))
-		start.startEdges.add(edge)
-		end.endEdges.add(edge)
+		edge.points.add(new Point(x1 + 0, y1 + 2, false));
+		edge.points.add(new Point(x1 + 1, y1 + 2, false));
+		start.startEdges.add(edge);
+		end.endEdges.add(edge);
 
-		vertex.add(start)
-		vertex.add(end)
-		return new GraphModel(vertex);
+		vertex.add(start);
+		vertex.add(end);
 	}
 }
